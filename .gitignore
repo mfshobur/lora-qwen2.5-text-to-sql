@@ -1,0 +1,28 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Secrets
+.env
+
+# Large / generated artifacts
+models/
+*.db
+logs/
+
+# Intermediate training checkpoints (the final adapter in lora_output/ is kept)
+lora_output/checkpoint-*/
+
+# Generated artifacts (rebuilt by evaluate.py / generate_report.py)
+eval_results.json
+report.html
+
+# macOS
+.DS_Store

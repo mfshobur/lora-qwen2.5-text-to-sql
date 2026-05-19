@@ -1,0 +1,13 @@
+
+Database:
+customers(customer_id, full_name, email, city, segment[retail|corporate|vip], signup_date)
+orders(order_id, customer_id, employee_id, order_date, status[completed|cancelled|pending], total_amount)
+products(product_id, product_name, category, price, cost)
+employees(employee_id, full_name, region[west|central|east], commission_rate)
+order_items(order_item_id, order_id, product_id, quantity, unit_price)
+
+Foreign Keys:
+orders.customer_id -> customers.customer_id
+orders.employee_id -> employees.employee_id
+order_items.order_id -> orders.order_id
+order_items.product_id -> products.product_id

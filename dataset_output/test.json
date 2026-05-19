@@ -1,0 +1,2097 @@
+[
+  {
+    "natural_language": "Get all orders where the total amount is exactly $100.",
+    "sql_query": "SELECT * FROM orders WHERE total_amount = 100;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get the total revenue generated from orders placed by corporate customers.",
+    "sql_query": "SELECT SUM(o.total_amount) AS total_revenue FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE c.segment = 'corporate';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "List the top 5 products by total quantity sold, including the category of each product.",
+    "sql_query": "SELECT p.product_name, p.category, SUM(oi.quantity) AS total_quantity FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.product_id ORDER BY total_quantity DESC LIMIT 5;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "List all completed orders with a total amount greater than $200.",
+    "sql_query": "SELECT * FROM orders WHERE status = 'completed' AND total_amount > 200;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find the total number of completed and cancelled orders for each employee.",
+    "sql_query": "SELECT e.full_name, SUM(CASE WHEN o.status = 'completed' THEN 1 ELSE 0 END) AS completed_orders, SUM(CASE WHEN o.status = 'cancelled' THEN 1 ELSE 0 END) AS cancelled_orders FROM employees e JOIN orders o ON e.employee_id = o.employee_id GROUP BY e.full_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Get the total commission for each employee based on completed orders.",
+    "sql_query": "SELECT employees.full_name, SUM(orders.total_amount * employees.commission_rate) AS total_commission FROM orders JOIN employees ON orders.employee_id = employees.employee_id WHERE orders.status = 'completed' GROUP BY employees.employee_id;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "List all customers who have placed more than 5 orders, showing their full name and total amount spent, and also include the number of orders they have made.",
+    "sql_query": "SELECT c.full_name, COUNT(o.order_id) AS order_count, SUM(o.total_amount) AS total_spent FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id GROUP BY c.full_name HAVING COUNT(o.order_id) > 5",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get the total number of unique products sold in completed orders by each employee in the central region.",
+    "sql_query": "SELECT e.employee_id, e.full_name, COUNT(DISTINCT oi.product_id) AS unique_products_sold FROM employees e JOIN orders o ON e.employee_id = o.employee_id JOIN order_items oi ON o.order_id = oi.order_id WHERE e.region = 'central' AND o.status = 'completed' GROUP BY e.employee_id;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve the names of employees along with the total number of orders they have completed.",
+    "sql_query": "SELECT e.full_name, COUNT(o.order_id) AS total_orders FROM employees e JOIN orders o ON e.employee_id = o.employee_id WHERE o.status = 'completed' GROUP BY e.full_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Find the order details for orders with total amounts greater than the average total amount, along with customer information.",
+    "sql_query": "SELECT o.order_id, o.total_amount, c.full_name, c.email FROM orders o JOIN customers c ON o.customer_id = c.customer_id WHERE o.total_amount > (SELECT AVG(total_amount) FROM orders);",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "List all products with their total sold quantity and total revenue generated, but only for products that have sold more than 50 units and are in the 'electronics' category.",
+    "sql_query": "SELECT p.product_id, p.product_name, SUM(oi.quantity) AS total_sold, SUM(oi.quantity * oi.unit_price) AS total_revenue FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE p.category = 'electronics' AND oi.quantity > 50 GROUP BY p.product_id, p.product_name HAVING SUM(oi.quantity * oi.unit_price) > 1000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Get a count of orders along with the status for customers in 'corporate' segment.",
+    "sql_query": "SELECT orders.status, COUNT(orders.order_id) AS order_count FROM orders JOIN customers ON orders.customer_id = customers.customer_id WHERE customers.segment = 'corporate' GROUP BY orders.status;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Find out the average sales amount for products in the 'Electronics' category sold by each employee, but only include employees who have sold more than $1000 worth of products.",
+    "sql_query": "SELECT e.full_name, AVG(oi.unit_price * oi.quantity) AS average_sales FROM employees AS e JOIN orders AS o ON e.employee_id = o.employee_id JOIN order_items AS oi ON o.order_id = oi.order_id JOIN products AS p ON oi.product_id = p.product_id WHERE p.category = 'Electronics' GROUP BY e.employee_id HAVING SUM(oi.unit_price * oi.quantity) > 1000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Calculate the percentage of completed orders per segment and display the results as a decimal.",
+    "sql_query": "SELECT c.segment, COUNT(CASE WHEN o.status = 'completed' THEN 1 END) / COUNT(o.order_id) * 100 AS completion_rate FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.segment;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get all retail customers who signed up in 2021.",
+    "sql_query": "SELECT * FROM customers WHERE segment = 'retail' AND EXTRACT(YEAR FROM signup_date) = 2021;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get the total revenue generated by orders for each employee.",
+    "sql_query": "SELECT employees.full_name, SUM(orders.total_amount) AS total_revenue FROM employees JOIN orders ON employees.employee_id = orders.employee_id GROUP BY employees.full_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Get completed orders from the last 30 days.",
+    "sql_query": "SELECT * FROM orders WHERE status = 'completed' AND order_date >= NOW() - INTERVAL '30 days';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Identify customers who have purchased products from the 'electronics' category, showing the total number of orders and unique products bought.",
+    "sql_query": "SELECT c.customer_id, c.full_name, COUNT(DISTINCT o.order_id) AS order_count, COUNT(DISTINCT oi.product_id) AS unique_products FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN order_items oi ON o.order_id = oi.order_id JOIN products p ON oi.product_id = p.product_id WHERE p.category = 'electronics' GROUP BY c.customer_id, c.full_name;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Find the most popular product in terms of the number of units sold and the customer segment that purchased it the most.",
+    "sql_query": "SELECT p.product_name, c.segment, SUM(oi.quantity) AS total_units_sold FROM order_items oi JOIN products p ON oi.product_id = p.product_id JOIN orders o ON oi.order_id = o.order_id JOIN customers c ON o.customer_id = c.customer_id WHERE o.status = 'completed' GROUP BY p.product_name, c.segment ORDER BY total_units_sold DESC LIMIT 1;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Retrieve the average price of products sold by employees in the west region, considering only completed orders.",
+    "sql_query": "SELECT AVG(oi.unit_price) AS average_price, e.full_name FROM order_items AS oi JOIN orders AS o ON oi.order_id = o.order_id JOIN employees AS e ON o.employee_id = e.employee_id WHERE o.status = 'completed' AND e.region = 'west' GROUP BY e.full_name HAVING COUNT(oi.order_item_id) > 5",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "List all products with a cost greater than or equal to their price.",
+    "sql_query": "SELECT * FROM products WHERE cost >= price;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List employees along with the number of distinct products they sold and the total sales generated from those products.",
+    "sql_query": "SELECT e.employee_id, e.full_name, COUNT(DISTINCT oi.product_id) AS distinct_products_sold, SUM(oi.unit_price * oi.quantity) AS total_sales FROM employees e JOIN orders o ON e.employee_id = o.employee_id JOIN order_items oi ON o.order_id = oi.order_id GROUP BY e.employee_id;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "List the prices of all products available.",
+    "sql_query": "SELECT price FROM products;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find the total amount spent by each customer on all their orders.",
+    "sql_query": "SELECT c.full_name, SUM(o.total_amount) AS total_spent FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.full_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Show the most popular product among corporate customers based on the total quantity sold.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity) AS total_quantity_sold FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id JOIN customers c ON o.customer_id = c.customer_id WHERE c.segment = 'corporate' GROUP BY p.product_name ORDER BY total_quantity_sold DESC LIMIT 1;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Retrieve total sales for each product category where sales are above $500, sorted by the total sales amount.",
+    "sql_query": "SELECT p.category, SUM(oi.unit_price * oi.quantity) AS total_sales FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id GROUP BY p.category HAVING SUM(oi.unit_price * oi.quantity) > 500 ORDER BY total_sales DESC",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find all products in the 'Clothing' category with a price over $20.",
+    "sql_query": "SELECT * FROM products WHERE category = 'Clothing' AND price > 20;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List the top 5 products sold (by quantity) in the 'retail' segment, along with the total quantity sold.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity) AS total_quantity FROM order_items oi JOIN orders o ON oi.order_id = o.order_id JOIN customers c ON o.customer_id = c.customer_id JOIN products p ON oi.product_id = p.product_id WHERE c.segment = 'retail' GROUP BY p.product_name ORDER BY total_quantity DESC LIMIT 5;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Get all order items with a quantity of 5 or more.",
+    "sql_query": "SELECT * FROM order_items WHERE quantity >= 5;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Retrieve the customer IDs and their corresponding total order amount for customers who have ordered more than 5 times and spend an average greater than $200 per order.",
+    "sql_query": "SELECT c.customer_id, SUM(o.total_amount) AS total_order_amount FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id GROUP BY c.customer_id HAVING COUNT(o.order_id) > 5 AND AVG(o.total_amount) > 200",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Determine the total revenue generated by products in the 'fashion' category from corporate customer orders, grouped by employee.",
+    "sql_query": "SELECT e.full_name, SUM(oi.unit_price * oi.quantity) AS total_revenue FROM employees e JOIN orders o ON e.employee_id = o.employee_id JOIN order_items oi ON o.order_id = oi.order_id JOIN products p ON oi.product_id = p.product_id JOIN customers c ON o.customer_id = c.customer_id WHERE c.segment = 'corporate' AND p.category = 'fashion' GROUP BY e.full_name;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Retrieve all completed orders with a total amount of exactly $500.",
+    "sql_query": "SELECT * FROM orders WHERE status = 'completed' AND total_amount = 500;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List product categories that generated total revenue greater than $50,000, considering only completed orders.",
+    "sql_query": "SELECT p.category, SUM(oi.quantity * oi.unit_price) AS total_revenue FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.category HAVING SUM(oi.quantity * oi.unit_price) > 50000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve the average commission rate for employees based on the total sales they generated.",
+    "sql_query": "SELECT e.employee_id, e.full_name, AVG(e.commission_rate) AS average_commission_rate\nFROM employees e\nJOIN orders o ON e.employee_id = o.employee_id\nGROUP BY e.employee_id, e.full_name;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Retrieve all order items associated with order_id 10.",
+    "sql_query": "SELECT * FROM order_items WHERE order_id = 10;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Determine the total number of completed orders and their total amounts for each customer segment in the 'west' region.",
+    "sql_query": "SELECT c.segment, COUNT(o.order_id) AS total_completed_orders, SUM(o.total_amount) AS total_order_amount FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN employees e ON o.employee_id = e.employee_id WHERE e.region = 'west' AND o.status = 'completed' GROUP BY c.segment;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "List products that belong to multiple categories based on their sales across completed orders.",
+    "sql_query": "SELECT p.product_name, COUNT(DISTINCT p.category) AS category_count FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.product_id HAVING COUNT(DISTINCT p.category) > 1",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Identify all the product categories that have more than 5 products sold by employees from the west region, calculating the total sales amount for each category.",
+    "sql_query": "SELECT p.category, SUM(oi.quantity * oi.unit_price) AS total_sales FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id JOIN employees AS e ON o.employee_id = e.employee_id WHERE e.region = 'west' GROUP BY p.category HAVING COUNT(DISTINCT p.product_id) > 5",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find products sold by employees in the west region, grouped by product, where the total orders exceed 5.",
+    "sql_query": "SELECT p.product_name, COUNT(oi.order_item_id) AS total_orders FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id JOIN employees AS e ON o.employee_id = e.employee_id WHERE e.region = 'west' GROUP BY p.product_name HAVING COUNT(oi.order_item_id) > 5",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find the most popular product in the 'west' region based on the number of units sold, but only include products sold more than 100 times.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity) AS total_sold FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id JOIN employees AS e ON o.employee_id = e.employee_id WHERE e.region = 'west' GROUP BY p.product_name HAVING SUM(oi.quantity) > 100 ORDER BY total_sold DESC LIMIT 1",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Get the full names and total order amounts of customers who are in the retail segment and have completed orders.",
+    "sql_query": "SELECT c.full_name, SUM(o.total_amount) AS total_order_amount FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE c.segment = 'retail' AND o.status = 'completed' GROUP BY c.full_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Identify the employee who has the highest average order amount and how many orders they have processed.",
+    "sql_query": "SELECT e.full_name, AVG(o.total_amount) AS average_order_amount, COUNT(o.order_id) AS order_count FROM employees e JOIN orders o ON e.employee_id = o.employee_id GROUP BY e.full_name ORDER BY average_order_amount DESC LIMIT 1",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get the total sales amount per segment for completed orders in the east region.",
+    "sql_query": "SELECT c.segment, SUM(o.total_amount) AS total_sales FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN employees e ON o.employee_id = e.employee_id WHERE o.status = 'completed' AND e.region = 'east' GROUP BY c.segment;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve all orders along with the names of the customers who made them.",
+    "sql_query": "SELECT orders.order_id, customers.full_name FROM orders JOIN customers ON orders.customer_id = customers.customer_id;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "List all products that have never been ordered.",
+    "sql_query": "SELECT * FROM products WHERE product_id NOT IN (SELECT DISTINCT product_id FROM order_items);",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get all orders where the total amount is exactly $250.",
+    "sql_query": "SELECT * FROM orders WHERE total_amount = 250;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get the total amount of completed orders with customer emails for customers located in 'New York'.",
+    "sql_query": "SELECT o.total_amount, c.email FROM orders o JOIN customers c ON o.customer_id = c.customer_id WHERE o.status = 'completed' AND c.city = 'New York';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "List all customers from the corporate segment who have placed any pending orders.",
+    "sql_query": "SELECT DISTINCT customers.full_name FROM customers JOIN orders ON customers.customer_id = orders.customer_id WHERE customers.segment = 'corporate' AND orders.status = 'pending';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "List the cities of customers who have made at least one cancelled order.",
+    "sql_query": "SELECT DISTINCT customers.city FROM orders JOIN customers ON orders.customer_id = customers.customer_id WHERE orders.status = 'cancelled';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Determine the number of distinct customers who have purchased products in each category, aggregated by category.",
+    "sql_query": "SELECT p.category, COUNT(DISTINCT c.customer_id) AS distinct_customer_count\nFROM products p\nJOIN order_items oi ON p.product_id = oi.product_id\nJOIN orders o ON oi.order_id = o.order_id\nJOIN customers c ON o.customer_id = c.customer_id\nGROUP BY p.category;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Show the total amount spent by each customer on pending orders.",
+    "sql_query": "SELECT c.full_name, SUM(o.total_amount) AS total_pending FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE o.status = 'pending' GROUP BY c.full_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Get the total amount of all orders placed in March 2023.",
+    "sql_query": "SELECT SUM(total_amount) FROM orders WHERE order_date BETWEEN '2023-03-01' AND '2023-03-31';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List the product categories that have generated more than 5000 in sales with the number of distinct customers who bought them.",
+    "sql_query": "SELECT p.category, SUM(oi.quantity * oi.unit_price) AS total_sales, COUNT(DISTINCT o.customer_id) AS distinct_customers FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.category HAVING SUM(oi.quantity * oi.unit_price) > 5000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Get the list of products that have been ordered more than 10 times.",
+    "sql_query": "SELECT products.product_name FROM products JOIN order_items ON products.product_id = order_items.product_id GROUP BY products.product_name HAVING SUM(order_items.quantity) > 10;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Retrieve all employees with the name 'John'.",
+    "sql_query": "SELECT * FROM employees WHERE full_name = 'John';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List all orders with their corresponding customer names and statuses.",
+    "sql_query": "SELECT o.order_id, c.full_name, o.status FROM orders o JOIN customers c ON o.customer_id = c.customer_id;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "List all customers who have ordered products in every category and their total spent amount.",
+    "sql_query": "SELECT c.full_name, SUM(o.total_amount) AS total_spent FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id JOIN order_items AS oi ON o.order_id = oi.order_id JOIN products AS p ON oi.product_id = p.product_id GROUP BY c.customer_id HAVING COUNT(DISTINCT p.category) = (SELECT COUNT(DISTINCT category) FROM products)",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Show all products with a cost equal to $5.",
+    "sql_query": "SELECT * FROM products WHERE cost = 5;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get a list of products and the number of times each has been ordered, but only include products that have been sold for over $2000 in total.",
+    "sql_query": "SELECT p.product_id, p.product_name, COUNT(oi.order_item_id) AS order_count, SUM(oi.unit_price * oi.quantity) AS total_sales FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id GROUP BY p.product_id HAVING SUM(oi.unit_price * oi.quantity) > 2000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find the products that were ordered more than 5 times in total, including the product category and total orders.",
+    "sql_query": "SELECT p.product_name, p.category, COUNT(oi.order_item_id) AS total_orders FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id GROUP BY p.product_name, p.category HAVING COUNT(oi.order_item_id) > 5",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Retrieve the total number of products sold and the total revenue generated from sales of products in the 'Electronics' category for completed orders.",
+    "sql_query": "SELECT p.category, COUNT(oi.order_item_id) AS total_products_sold, SUM(oi.unit_price * oi.quantity) AS total_revenue FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id WHERE p.category = 'Electronics' AND o.status = 'completed' GROUP BY p.category;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find the average order value and total count of orders for each customer segment, filtering out segments with less than 5 orders.",
+    "sql_query": "SELECT c.segment, AVG(o.total_amount) AS average_order_value, COUNT(o.order_id) AS total_orders FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id GROUP BY c.segment HAVING COUNT(o.order_id) >= 5",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "List the average quantity of products sold and total revenue generated for products that have been sold in at least 5 orders.",
+    "sql_query": "SELECT p.product_name, AVG(oi.quantity) AS average_quantity, SUM(oi.unit_price * oi.quantity) AS total_revenue FROM order_items AS oi JOIN products AS p ON oi.product_id = p.product_id JOIN orders AS o ON oi.order_id = o.order_id GROUP BY p.product_id HAVING COUNT(o.order_id) >= 5",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Identify the segments that have an average cost of products greater than $20, including the average cost and count of products per segment.",
+    "sql_query": "SELECT c.segment, AVG(p.cost) AS average_cost, COUNT(p.product_id) AS product_count FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id JOIN order_items AS oi ON o.order_id = oi.order_id JOIN products AS p ON oi.product_id = p.product_id GROUP BY c.segment HAVING AVG(p.cost) > 20",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Get the total order amount and average quantity of items sold for each product category, only for categories where total sales exceed $2000.",
+    "sql_query": "SELECT p.category, SUM(o.total_amount) AS total_sales, AVG(oi.quantity) AS average_quantity_sold FROM order_items AS oi JOIN products AS p ON oi.product_id = p.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.category HAVING SUM(o.total_amount) > 2000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve the order dates and total amounts for orders placed by retail customers.",
+    "sql_query": "SELECT o.order_date, o.total_amount FROM orders o JOIN customers c ON o.customer_id = c.customer_id WHERE c.segment = 'retail';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Show the average price of products ordered by VIP customers, filtered to include products where the average price exceeds $100.",
+    "sql_query": "SELECT p.product_name, AVG(p.price) AS avg_price FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id JOIN customers AS c ON o.customer_id = c.customer_id WHERE c.segment = 'vip' GROUP BY p.product_id HAVING AVG(p.price) > 100",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "List all orders made by a specific customer with ID 10.",
+    "sql_query": "SELECT * FROM orders WHERE customer_id = 10;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List all completed orders made by customers from 'Chicago'.",
+    "sql_query": "SELECT * FROM orders WHERE status = 'completed' AND customer_id IN (SELECT customer_id FROM customers WHERE city = 'Chicago');",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Calculate the total amount of orders and the average order amount for each customer, only for those customers who have made more than 3 orders.",
+    "sql_query": "SELECT c.full_name, COUNT(o.order_id) AS order_count, SUM(o.total_amount) AS total_amount, AVG(o.total_amount) AS avg_order_amount FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id GROUP BY c.customer_id HAVING COUNT(o.order_id) > 3",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get a list of all customers who signed up in January 2022.",
+    "sql_query": "SELECT * FROM customers WHERE signup_date >= '2022-01-01' AND signup_date < '2022-02-01';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List the average order amount for each employee in the central region.",
+    "sql_query": "SELECT e.full_name, AVG(o.total_amount) AS average_order_amount FROM employees e JOIN orders o ON e.employee_id = o.employee_id WHERE e.region = 'central' GROUP BY e.full_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Find the most popular product in each customer segment based on total sales, but only for completed orders.",
+    "sql_query": "SELECT c.segment, p.product_name, SUM(oi.quantity * oi.unit_price) AS total_sales FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN order_items oi ON o.order_id = oi.order_id JOIN products p ON oi.product_id = p.product_id WHERE o.status = 'completed' GROUP BY c.segment, p.product_name ORDER BY total_sales DESC;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve all employees in the 'central' region with a commission rate above 5%.",
+    "sql_query": "SELECT * FROM employees WHERE region = 'central' AND commission_rate > 0.05;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get the sum of total order amounts for each employee who has handled orders with more than 3 items.",
+    "sql_query": "SELECT e.full_name, SUM(o.total_amount) AS total_handled_orders FROM employees AS e JOIN orders AS o ON e.employee_id = o.employee_id JOIN order_items AS oi ON o.order_id = oi.order_id GROUP BY e.full_name HAVING COUNT(oi.order_item_id) > 3",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Select products that are priced at exactly $20.",
+    "sql_query": "SELECT * FROM products WHERE price = 20;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get the highest total order amount for each employee.",
+    "sql_query": "SELECT employees.full_name, MAX(orders.total_amount) AS highest_order FROM employees JOIN orders ON employees.employee_id = orders.employee_id GROUP BY employees.full_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "List all employees with the name 'John'.",
+    "sql_query": "SELECT * FROM employees WHERE full_name LIKE 'John%';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List all employees with a commission rate higher than 10%.",
+    "sql_query": "SELECT * FROM employees WHERE commission_rate > 10;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find all customers who have placed at least one order and their order statuses.",
+    "sql_query": "SELECT DISTINCT c.full_name, o.status FROM customers c JOIN orders o ON c.customer_id = o.customer_id;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "List products that cost less than 20 and belong to the 'accessories' category.",
+    "sql_query": "SELECT * FROM products WHERE cost < 20 AND category = 'accessories';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Determine the most common product category for orders placed by 'retail' customers in the last month.",
+    "sql_query": "SELECT p.category, COUNT(oi.order_item_id) AS item_count FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id JOIN customers c ON o.customer_id = c.customer_id WHERE c.segment = 'retail' AND o.order_date >= CURRENT_DATE - INTERVAL '1 month' GROUP BY p.category ORDER BY item_count DESC LIMIT 1;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Identify the products that have generated more than $2000 in revenue, including the total revenue for each, while considering only completed orders.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity * oi.unit_price) AS total_revenue FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.product_name HAVING SUM(oi.quantity * oi.unit_price) > 2000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Get the total amount of orders and the average price of products sold to corporate customers in the east region for the year 2023.",
+    "sql_query": "SELECT SUM(o.total_amount) AS total_order_amount, AVG(oi.unit_price) AS average_product_price FROM orders o JOIN customers c ON o.customer_id = c.customer_id JOIN order_items oi ON o.order_id = oi.order_id JOIN products p ON oi.product_id = p.product_id JOIN employees e ON o.employee_id = e.employee_id WHERE c.segment = 'corporate' AND e.region = 'east' AND EXTRACT(YEAR FROM o.order_date) = 2023;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Count the number of customers in the 'vip' segment.",
+    "sql_query": "SELECT COUNT(*) AS total_vip_customers FROM customers WHERE segment = 'vip';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Determine the total revenue generated from order items for products in the 'electronics' category, grouped by employee region, only considering completed orders.",
+    "sql_query": "SELECT e.region, SUM(oi.quantity * oi.unit_price) AS total_revenue FROM order_items oi JOIN products p ON oi.product_id = p.product_id JOIN orders o ON oi.order_id = o.order_id JOIN employees e ON o.employee_id = e.employee_id WHERE p.category = 'electronics' AND o.status = 'completed' GROUP BY e.region;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get all customers who signed up in the last month.",
+    "sql_query": "SELECT * FROM customers WHERE signup_date >= NOW() - INTERVAL '1 month';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List customers and their cities for those who have more than one order.",
+    "sql_query": "SELECT customers.full_name, customers.city FROM customers JOIN orders ON customers.customer_id = orders.customer_id GROUP BY customers.customer_id HAVING COUNT(orders.order_id) > 1;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Retrieve the emails of VIP customers who have pending orders.",
+    "sql_query": "SELECT DISTINCT c.email FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE c.segment = 'vip' AND o.status = 'pending';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Retrieve the full name and email of customers who have placed orders in the last month.",
+    "sql_query": "SELECT customers.full_name, customers.email FROM customers JOIN orders ON customers.customer_id = orders.customer_id WHERE orders.order_date >= NOW() - INTERVAL '30 days';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Get all orders placed on January 15, 2023.",
+    "sql_query": "SELECT * FROM orders WHERE order_date = '2023-01-15';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find all employees who work in the central region.",
+    "sql_query": "SELECT * FROM employees WHERE region = 'central';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Identify the products that have a total sales amount above $1500, along with the number of unique customers who bought them.",
+    "sql_query": "SELECT p.product_id, p.product_name, SUM(oi.quantity * oi.unit_price) AS total_sales, COUNT(DISTINCT o.customer_id) AS unique_customers FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.product_id, p.product_name HAVING SUM(oi.quantity * oi.unit_price) > 1500",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "List customers who have ordered more than 2 different product types but have a total spent of less than $300.",
+    "sql_query": "SELECT c.full_name FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN order_items oi ON o.order_id = oi.order_id GROUP BY c.customer_id HAVING COUNT(DISTINCT oi.product_id) > 2 AND SUM(oi.quantity * oi.unit_price) < 300;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find the city and segment of customers who have placed orders with the maximum total amount, and return their corresponding order details.",
+    "sql_query": "SELECT c.city, c.segment, o.order_id, o.total_amount FROM customers c INNER JOIN orders o ON c.customer_id = o.customer_id WHERE o.total_amount = (SELECT MAX(total_amount) FROM orders);",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "List the top 3 products sold (by quantity) for each employee in the 'west' region.",
+    "sql_query": "SELECT e.full_name AS employee_name, p.product_name, SUM(oi.quantity) AS total_quantity FROM employees e JOIN orders o ON e.employee_id = o.employee_id JOIN order_items oi ON o.order_id = oi.order_id JOIN products p ON oi.product_id = p.product_id WHERE e.region = 'west' GROUP BY e.full_name, p.product_name ORDER BY total_quantity DESC LIMIT 3;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Calculate the percentage of completed orders for each customer segment over the total orders placed, with a threshold filter for segments having more than 20 total orders.",
+    "sql_query": "SELECT c.segment, (SUM(CASE WHEN o.status = 'completed' THEN 1 ELSE 0 END) * 100.0 / COUNT(o.order_id)) AS percentage_completed FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id GROUP BY c.segment HAVING COUNT(o.order_id) > 20",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Retrieve the total quantity of each product sold along with the product name, but only include products with total sales exceeding 100 units.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity) AS total_quantity_sold FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.product_id HAVING SUM(oi.quantity) > 100",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find all employees in the 'west' region.",
+    "sql_query": "SELECT * FROM employees WHERE region = 'west';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find the email addresses of all corporate customers.",
+    "sql_query": "SELECT email FROM customers WHERE segment = 'corporate';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List customer names with their order status for all cancelled orders.",
+    "sql_query": "SELECT customers.full_name, orders.status FROM customers JOIN orders ON customers.customer_id = orders.customer_id WHERE orders.status = 'cancelled';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Find the total number of products ordered along with the order date.",
+    "sql_query": "SELECT o.order_date, SUM(oi.quantity) AS total_products_ordered FROM orders o JOIN order_items oi ON o.order_id = oi.order_id GROUP BY o.order_date;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "List all products in the furniture category with a price greater than $300.",
+    "sql_query": "SELECT * FROM products WHERE category = 'furniture' AND price > 300;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find the most frequently ordered product along with the number of times it was ordered.",
+    "sql_query": "SELECT p.product_name, COUNT(oi.product_id) as order_count FROM products p JOIN order_items oi ON p.product_id = oi.product_id GROUP BY p.product_name ORDER BY order_count DESC LIMIT 1;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Calculate the percentage of completed orders for each customer segment.",
+    "sql_query": "SELECT c.segment, COUNT(CASE WHEN o.status = 'completed' THEN 1 END) * 100.0 / COUNT(o.order_id) AS completed_percentage FROM customers c LEFT JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.segment",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Retrieve the average price of products sold per segment by joining orders and customers, while ignoring cancelled orders.",
+    "sql_query": "SELECT c.segment, AVG(p.price) AS average_price FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN order_items oi ON o.order_id = oi.order_id JOIN products p ON oi.product_id = p.product_id WHERE o.status != 'cancelled' GROUP BY c.segment;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get the names of all customers who signed up after January 1, 2023.",
+    "sql_query": "SELECT full_name FROM customers WHERE signup_date > '2023-01-01';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List all products in the 'electronics' category.",
+    "sql_query": "SELECT * FROM products WHERE category = 'electronics';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get the names of all products that cost less than $50.",
+    "sql_query": "SELECT product_name FROM products WHERE cost < 50;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get a summary of the number of products sold and the total sales for each employee in the east region.",
+    "sql_query": "SELECT e.full_name, COUNT(oi.product_id) AS total_products_sold, SUM(oi.unit_price * oi.quantity) AS total_sales FROM employees e JOIN orders o ON e.employee_id = o.employee_id JOIN order_items oi ON o.order_id = oi.order_id JOIN customers c ON o.customer_id = c.customer_id WHERE e.region = 'east' AND o.status = 'completed' GROUP BY e.full_name;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Show all products along with the total number of items ordered.",
+    "sql_query": "SELECT products.product_name, SUM(order_items.quantity) AS total_ordered FROM order_items JOIN products ON order_items.product_id = products.product_id GROUP BY products.product_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Get all employees with names containing 'Mike'.",
+    "sql_query": "SELECT * FROM employees WHERE full_name LIKE '%Mike%';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get the customer names along with their total number of orders and total spending, but only include customers who have spent above the average spending of all customers.",
+    "sql_query": "SELECT c.full_name, COUNT(o.order_id) AS total_orders, SUM(o.total_amount) AS total_spending FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id GROUP BY c.customer_id HAVING SUM(o.total_amount) > (SELECT AVG(total_amount) FROM orders)",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Determine the average commission rate earned by employees based on the city of the customers they serve, and list it alongside the employee's name.",
+    "sql_query": "SELECT e.full_name, c.city, AVG(e.commission_rate) AS average_commission FROM employees e JOIN orders o ON e.employee_id = o.employee_id JOIN customers c ON o.customer_id = c.customer_id GROUP BY e.full_name, c.city",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Retrieve all orders made in the current month.",
+    "sql_query": "SELECT * FROM orders WHERE order_date >= DATE_TRUNC('month', CURRENT_DATE);",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List all orders with a total amount greater than $500.",
+    "sql_query": "SELECT * FROM orders WHERE total_amount > 500;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Retrieve all order items for a specific order_id 3.",
+    "sql_query": "SELECT * FROM order_items WHERE order_id = 3;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Show the number of completed orders and total sales amount for each product, but only for products that have been sold more than 5 times.",
+    "sql_query": "SELECT p.product_name, COUNT(o.order_id) AS completed_orders, SUM(oi.unit_price * oi.quantity) AS total_sales FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.product_name HAVING COUNT(o.order_id) > 5",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find products that are in the category 'Books'.",
+    "sql_query": "SELECT * FROM products WHERE category = 'Books';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find the average price of all products.",
+    "sql_query": "SELECT AVG(price) FROM products;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find the total number of orders and total sales for retail customers per city.",
+    "sql_query": "SELECT c.city, COUNT(o.order_id) AS total_orders, SUM(o.total_amount) AS total_sales FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE c.segment = 'retail' GROUP BY c.city;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Retrieve all employees with a commission rate of 10%.",
+    "sql_query": "SELECT * FROM employees WHERE commission_rate = 10;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Retrieve the employee details who made the most sales, including the total sales amount and the region they work in.",
+    "sql_query": "SELECT e.full_name, e.region, SUM(o.total_amount) AS total_sales FROM employees e JOIN orders o ON e.employee_id = o.employee_id GROUP BY e.employee_id ORDER BY total_sales DESC LIMIT 1;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "List the order IDs and total amount for completed orders along with the employee names who handled those orders.",
+    "sql_query": "SELECT orders.order_id, orders.total_amount, employees.full_name FROM orders JOIN employees ON orders.employee_id = employees.employee_id WHERE orders.status = 'completed';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Retrieve all order items for the product 'Laptop'.",
+    "sql_query": "SELECT * FROM order_items WHERE product_id IN (SELECT product_id FROM products WHERE product_name = 'Laptop');",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Retrieve the average price of products ordered by each segment, and show only those segments with an average price above $30.",
+    "sql_query": "SELECT c.segment, AVG(p.price) AS average_product_price FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id JOIN order_items AS oi ON o.order_id = oi.order_id JOIN products AS p ON oi.product_id = p.product_id GROUP BY c.segment HAVING AVG(p.price) > 30",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Calculate the percentage of completed orders relative to total orders for each customer segment.",
+    "sql_query": "SELECT c.segment, COUNT(CASE WHEN o.status = 'completed' THEN 1 END) * 100.0 / COUNT(o.order_id) AS completed_order_percentage FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.segment;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "List all products along with total sales and the number of different orders they were included in.",
+    "sql_query": "SELECT p.product_id, p.product_name, SUM(oi.quantity * oi.unit_price) AS total_sales, COUNT(DISTINCT o.order_id) AS order_count FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id GROUP BY p.product_id;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve the list of products with their total units sold for completed orders and filter for those with a unit price greater than 50, including only products sold over 30 times.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity) AS total_units_sold FROM order_items AS oi JOIN products AS p ON oi.product_id = p.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' AND oi.unit_price > 50 GROUP BY p.product_name HAVING SUM(oi.quantity) > 30",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "List the employee names who have processed orders in each region along with the total amount of orders processed by them.",
+    "sql_query": "SELECT e.full_name, e.region, SUM(o.total_amount) AS total_processed FROM employees e JOIN orders o ON e.employee_id = o.employee_id GROUP BY e.employee_id, e.region;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Show all orders with an order_id of 101.",
+    "sql_query": "SELECT * FROM orders WHERE order_id = 101;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List customer names and their total order count, but only for customers who have at least one order associated with the employee who has the highest commission rate.",
+    "sql_query": "SELECT c.full_name, COUNT(o.order_id) AS order_count FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE o.employee_id = (SELECT employee_id FROM employees ORDER BY commission_rate DESC LIMIT 1) GROUP BY c.customer_id;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Find all products that were sold in orders completed by employees from the west region, showing total sales for each product.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity * oi.unit_price) AS total_sales FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id JOIN employees e ON o.employee_id = e.employee_id WHERE e.region = 'west' AND o.status = 'completed' GROUP BY p.product_id;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve the average commission rate for employees based on their region, including the region name and average commission rate.",
+    "sql_query": "SELECT e.region, AVG(e.commission_rate) AS average_commission_rate FROM employees e GROUP BY e.region;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get all completed orders from a specific date, say 2023-01-15.",
+    "sql_query": "SELECT * FROM orders WHERE status = 'completed' AND order_date = '2023-01-15';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find all employees from the east region and their corresponding completed orders.",
+    "sql_query": "SELECT employees.full_name, orders.order_id FROM employees JOIN orders ON employees.employee_id = orders.employee_id WHERE employees.region = 'east' AND orders.status = 'completed';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Find the names of customers who have made orders with a status of 'cancelled'.",
+    "sql_query": "SELECT DISTINCT customers.full_name FROM customers JOIN orders ON customers.customer_id = orders.customer_id WHERE orders.status = 'cancelled';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Retrieve the average number of items per order for each product category, considering only completed orders.",
+    "sql_query": "SELECT p.category, AVG(oi.quantity) AS avg_items_per_order FROM order_items oi JOIN orders o ON oi.order_id = o.order_id JOIN products p ON oi.product_id = p.product_id WHERE o.status = 'completed' GROUP BY p.category;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Calculate the total number of items sold for each product where the total sales exceed $5,000.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity) AS total_items_sold FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.product_name HAVING SUM(oi.quantity * oi.unit_price) > 5000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find all VIP customers living in New York.",
+    "sql_query": "SELECT * FROM customers WHERE segment = 'vip' AND city = 'New York';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Retrieve all customers located in California.",
+    "sql_query": "SELECT * FROM customers WHERE city = 'California';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Retrieve the total number of completed orders for each customer along with their email.",
+    "sql_query": "SELECT customers.email, COUNT(orders.order_id) AS completed_orders FROM customers JOIN orders ON customers.customer_id = orders.customer_id WHERE orders.status = 'completed' GROUP BY customers.email;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Get the total sales amount for each customer segment, including their names and the number of orders they placed.",
+    "sql_query": "SELECT c.segment, c.full_name, COUNT(o.order_id) AS order_count, SUM(o.total_amount) AS total_sales FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.segment, c.full_name;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "List product names with their respective total sales and list those that have sold more than 100 units.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity) AS total_units_sold FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id GROUP BY p.product_name HAVING SUM(oi.quantity) > 100",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find all customers with their last order date for those who have placed orders.",
+    "sql_query": "SELECT c.full_name, MAX(o.order_date) AS last_order_date FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Get the email and segment of customers who have pending orders.",
+    "sql_query": "SELECT c.email, c.segment FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE o.status = 'pending';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Get the total sales grouped by product for orders from corporate customers only.",
+    "sql_query": "SELECT p.product_name, SUM(o.total_amount) AS total_sales FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id JOIN customers c ON o.customer_id = c.customer_id WHERE c.segment = 'corporate' GROUP BY p.product_name;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Get the names of customers who have made purchases in the last month.",
+    "sql_query": "SELECT DISTINCT c.full_name FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE o.order_date >= CURRENT_DATE - INTERVAL '1 month';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Determine the total revenue generated from corporate customers and the average number of orders they placed, including only those with more than five orders.",
+    "sql_query": "SELECT c.segment, SUM(o.total_amount) AS total_revenue, AVG(order_count) AS average_orders FROM (SELECT customer_id, COUNT(order_id) AS order_count FROM orders GROUP BY customer_id HAVING COUNT(order_id) > 5) AS co JOIN customers AS c ON co.customer_id = c.customer_id JOIN orders AS o ON co.customer_id = o.customer_id WHERE c.segment = 'corporate' GROUP BY c.segment",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Get all the completed orders and their total amounts by corporate customers.",
+    "sql_query": "SELECT orders.order_id, orders.total_amount FROM orders JOIN customers ON orders.customer_id = customers.customer_id WHERE orders.status = 'completed' AND customers.segment = 'corporate';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Retrieve all orders placed on the 15th of any month.",
+    "sql_query": "SELECT * FROM orders WHERE EXTRACT(DAY FROM order_date) = 15;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List each city's total sales amount and number of customers segmented by customer type (retail, corporate, VIP).",
+    "sql_query": "SELECT c.city, c.segment, SUM(o.total_amount) AS total_sales, COUNT(DISTINCT c.customer_id) AS customer_count FROM customers c LEFT JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.city, c.segment;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Find the total number of order items per order for completed orders.",
+    "sql_query": "SELECT orders.order_id, COUNT(order_items.order_item_id) AS item_count FROM orders JOIN order_items ON orders.order_id = order_items.order_id WHERE orders.status = 'completed' GROUP BY orders.order_id;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Get the names and prices of all products in the electronics category.",
+    "sql_query": "SELECT product_name, price FROM products WHERE category = 'electronics';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find products that have a cost of less than $10.",
+    "sql_query": "SELECT * FROM products WHERE cost < 10;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List products along with the total quantity sold.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity) AS total_quantity FROM products p JOIN order_items oi ON p.product_id = oi.product_id GROUP BY p.product_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Determine the relationship between order status and customer segment by counting occurrences.",
+    "sql_query": "SELECT c.segment, o.status, COUNT(o.order_id) AS order_count FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.segment, o.status;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Find all orders placed by corporate customers.",
+    "sql_query": "SELECT o.order_id, o.order_date FROM orders o JOIN customers c ON o.customer_id = c.customer_id WHERE c.segment = 'corporate';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "List all employees in the 'east' region who have customers with more than 3 completed orders, along with the total sales generated by those customers.",
+    "sql_query": "SELECT e.full_name, SUM(o.total_amount) AS total_sales FROM employees AS e JOIN orders AS o ON e.employee_id = o.employee_id JOIN customers AS c ON o.customer_id = c.customer_id WHERE e.region = 'east' AND o.status = 'completed' GROUP BY e.full_name HAVING COUNT(o.order_id) > 3",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Get the average price of products sold in orders completed by employees from the east region.",
+    "sql_query": "SELECT AVG(p.price) AS average_product_price FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id JOIN employees e ON o.employee_id = e.employee_id WHERE e.region = 'east' AND o.status = 'completed';",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "List distinct segments of customers available in the database.",
+    "sql_query": "SELECT DISTINCT segment FROM customers;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find the total number of order items for each order status.",
+    "sql_query": "SELECT o.status, SUM(oi.quantity) AS total_items FROM orders o JOIN order_items oi ON o.order_id = oi.order_id GROUP BY o.status;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Find all products that cost more than $50.",
+    "sql_query": "SELECT * FROM products WHERE cost > 50;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find the category of products that have generated the most income from completed orders, with the total income.",
+    "sql_query": "SELECT p.category, SUM(oi.unit_price * oi.quantity) AS total_income FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.category ORDER BY total_income DESC LIMIT 1;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Calculate the total quantity sold and the average price of all products from orders completed in the last 30 days, grouped by product name.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity) AS total_quantity_sold, AVG(oi.unit_price) AS average_price FROM order_items oi JOIN products p ON oi.product_id = p.product_id JOIN orders o ON oi.order_id = o.order_id WHERE o.status = 'completed' AND o.order_date >= CURRENT_DATE - INTERVAL '30 day' GROUP BY p.product_id;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Identify the customers who have never placed a cancelled order and their total spent.",
+    "sql_query": "SELECT c.full_name, SUM(o.total_amount) AS total_spent FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE c.customer_id NOT IN (SELECT DISTINCT c2.customer_id FROM customers c2 JOIN orders o2 ON c2.customer_id = o2.customer_id WHERE o2.status = 'cancelled') GROUP BY c.full_name",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Show the total revenue generated from completed orders by each employee.",
+    "sql_query": "SELECT employees.full_name, SUM(orders.total_amount) as revenue FROM orders JOIN employees ON orders.employee_id = employees.employee_id WHERE orders.status = 'completed' GROUP BY employees.full_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "List the top 5 products by the total revenue generated, only including products sold in completed orders.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity * oi.unit_price) AS total_revenue FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.product_name ORDER BY total_revenue DESC LIMIT 5;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "List product categories along with their respective total sales amount, including only categories that have generated sales of over $5000.",
+    "sql_query": "SELECT p.category, SUM(oi.unit_price * oi.quantity) AS total_sales FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id GROUP BY p.category HAVING SUM(oi.unit_price * oi.quantity) > 5000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find customers who live in 'Los Angeles' and are in the 'retail' segment.",
+    "sql_query": "SELECT * FROM customers WHERE city = 'Los Angeles' AND segment = 'retail';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find the average number of items ordered per employee for orders that are pending, only returning those employees with more than 5 pending orders.",
+    "sql_query": "SELECT e.full_name, AVG(oi.quantity) AS avg_items_per_order FROM employees AS e JOIN orders AS o ON e.employee_id = o.employee_id JOIN order_items AS oi ON o.order_id = oi.order_id WHERE o.status = 'pending' GROUP BY e.employee_id HAVING COUNT(o.order_id) > 5",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve the top 5 products with the highest total sales amount, filtering only for completed orders.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity * oi.unit_price) AS total_sales FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.product_id ORDER BY total_sales DESC LIMIT 5;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve all order items where the unit price is above $10.",
+    "sql_query": "SELECT * FROM order_items WHERE unit_price > 10;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find the total quantity of products sold in each category for completed orders, listing only categories with total quantities greater than 50.",
+    "sql_query": "SELECT p.category, SUM(oi.quantity) AS total_quantity FROM order_items AS oi JOIN orders AS o ON oi.order_id = o.order_id JOIN products AS p ON oi.product_id = p.product_id WHERE o.status = 'completed' GROUP BY p.category HAVING SUM(oi.quantity) > 50",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve names and total amounts of completed orders processed by employees with a commission rate greater than 5%.",
+    "sql_query": "SELECT orders.order_id, orders.total_amount FROM orders JOIN employees ON orders.employee_id = employees.employee_id WHERE orders.status = 'completed' AND employees.commission_rate > 0.05;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Get the order dates and total amounts of completed orders for customers in 'Los Angeles'.",
+    "sql_query": "SELECT o.order_date, o.total_amount FROM orders o JOIN customers c ON o.customer_id = c.customer_id WHERE c.city = 'Los Angeles' AND o.status = 'completed';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Identify the top 5 products sold in terms of revenue within the corporate segment, considering only completed orders.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity * oi.unit_price) AS total_revenue FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id JOIN customers c ON o.customer_id = c.customer_id WHERE c.segment = 'corporate' AND o.status = 'completed' GROUP BY p.product_name ORDER BY total_revenue DESC LIMIT 5;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Find the average total amount of orders processed by each employee.",
+    "sql_query": "SELECT employees.full_name, AVG(orders.total_amount) AS average_order_value FROM employees JOIN orders ON employees.employee_id = orders.employee_id GROUP BY employees.full_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Get the highest selling product category and its total sales amount, but only if the total sales exceed 15,000.",
+    "sql_query": "SELECT p.category, SUM(oi.quantity * oi.unit_price) AS total_sales FROM order_items AS oi JOIN products AS p ON oi.product_id = p.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.category HAVING SUM(oi.quantity * oi.unit_price) > 15000 ORDER BY total_sales DESC LIMIT 1",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Get the total number of items sold and total revenue generated for each product category, excluding categories with less than 10 items sold.",
+    "sql_query": "SELECT p.category, SUM(oi.quantity) AS total_items_sold, SUM(oi.unit_price * oi.quantity) AS total_revenue FROM order_items AS oi JOIN products AS p ON oi.product_id = p.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.category HAVING SUM(oi.quantity) >= 10",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Count the number of orders placed by each customer along with their respective segments, ordered by the count in descending order.",
+    "sql_query": "SELECT c.full_name, c.segment, COUNT(o.order_id) AS order_count FROM customers c LEFT JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id ORDER BY order_count DESC;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Generate a report of the most expensive order made by each customer, including order date and total amount.",
+    "sql_query": "SELECT c.full_name, o.order_date, MAX(o.total_amount) AS max_order_amount FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id, o.order_date;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "List each product's total sales and the number of distinct customers who purchased it, excluding products with less than 5 distinct customers.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity * oi.unit_price) AS total_sales, COUNT(DISTINCT o.customer_id) AS distinct_customers FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.product_name HAVING COUNT(DISTINCT o.customer_id) >= 5",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Get the count of products sold for each product category, summing the quantities sold across all completed orders.",
+    "sql_query": "SELECT p.category, SUM(oi.quantity) AS total_quantity_sold FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.category;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find all products in the home decor category.",
+    "sql_query": "SELECT * FROM products WHERE category = 'home decor';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List the cities and the number of completed orders from customers in those cities.",
+    "sql_query": "SELECT customers.city, COUNT(orders.order_id) AS completed_orders FROM customers JOIN orders ON customers.customer_id = orders.customer_id WHERE orders.status = 'completed' GROUP BY customers.city;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "List the total quantity sold for each product and the total revenue generated, including only products that sold more than 50 units.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity) AS total_quantity, SUM(oi.unit_price * oi.quantity) AS total_revenue FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id GROUP BY p.product_name HAVING SUM(oi.quantity) > 50",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "List the top three products with the highest total revenue generated, including their product name and total revenue amount.",
+    "sql_query": "SELECT p.product_name, SUM(oi.unit_price * oi.quantity) AS total_revenue FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id GROUP BY p.product_name ORDER BY total_revenue DESC LIMIT 3;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "List all orders along with the customer's full name for customers in the 'retail' segment.",
+    "sql_query": "SELECT orders.order_id, customers.full_name FROM orders JOIN customers ON orders.customer_id = customers.customer_id WHERE customers.segment = 'retail';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Find out the average price of products in each category, and only include categories that have at least five products listed.",
+    "sql_query": "SELECT p.category, AVG(p.price) AS average_price FROM products AS p GROUP BY p.category HAVING COUNT(p.product_id) >= 5",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "List all products in the 'home' category that have a price exactly $40.",
+    "sql_query": "SELECT * FROM products WHERE category = 'home' AND price = 40;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get all products that are available at a price greater than $200.",
+    "sql_query": "SELECT * FROM products WHERE price > 200;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Count the number of different products available.",
+    "sql_query": "SELECT COUNT(DISTINCT product_id) AS unique_products_count FROM products;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get all completed orders made in March 2023.",
+    "sql_query": "SELECT * FROM orders WHERE status = 'completed' AND order_date >= '2023-03-01' AND order_date < '2023-04-01';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Retrieve the total sales amount from orders placed in the last 30 days, grouped by customer segment.",
+    "sql_query": "SELECT customers.segment, SUM(orders.total_amount) AS total_sales FROM orders JOIN customers ON orders.customer_id = customers.customer_id WHERE orders.order_date >= CURRENT_DATE - INTERVAL '30 day' GROUP BY customers.segment;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Get the full names of all customers who signed up in 2023.",
+    "sql_query": "SELECT full_name FROM customers WHERE signup_date >= '2023-01-01' AND signup_date < '2024-01-01';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get all employees who work in the east region and have a commission rate of 7%.",
+    "sql_query": "SELECT * FROM employees WHERE region = 'east' AND commission_rate = 0.07;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get all products in the 'Furniture' category with a price of 100 or more.",
+    "sql_query": "SELECT * FROM products WHERE category = 'Furniture' AND price >= 100;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find the average order amount for each customer segment.",
+    "sql_query": "SELECT c.segment, AVG(o.total_amount) AS average_order_amount FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.segment;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "List the top 5 products by total sales amount and include the category, only considering completed orders.",
+    "sql_query": "SELECT p.product_name, p.category, SUM(oi.quantity * oi.unit_price) AS total_sales FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.product_name, p.category ORDER BY total_sales DESC LIMIT 5;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find the total amount of orders placed by customers in 'corporate' segment.",
+    "sql_query": "SELECT SUM(orders.total_amount) AS total_corporate_amount FROM orders JOIN customers ON orders.customer_id = customers.customer_id WHERE customers.segment = 'corporate';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Find all completed orders placed on '2023-10-01'.",
+    "sql_query": "SELECT * FROM orders WHERE status = 'completed' AND order_date = '2023-10-01';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find the most popular product in terms of the total quantity sold and the corresponding customer segment who purchased it the most.",
+    "sql_query": "SELECT p.product_name, c.segment, SUM(oi.quantity) AS total_quantity FROM order_items oi JOIN products p ON oi.product_id = p.product_id JOIN orders o ON oi.order_id = o.order_id JOIN customers c ON o.customer_id = c.customer_id GROUP BY p.product_name, c.segment ORDER BY total_quantity DESC LIMIT 1;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get the total amount of completed orders grouped by each customer's city.",
+    "sql_query": "SELECT c.city, SUM(o.total_amount) AS total_completed FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE o.status = 'completed' GROUP BY c.city;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Identify the top 5 products with the most orders, including the total quantity ordered and total revenue generated.",
+    "sql_query": "SELECT p.product_name, COUNT(oi.order_id) AS total_orders, SUM(oi.unit_price * oi.quantity) AS total_revenue FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id GROUP BY p.product_name ORDER BY total_orders DESC LIMIT 5;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get the average order amount by employee region for orders that have more than two items.",
+    "sql_query": "SELECT e.region, AVG(o.total_amount) AS avg_order_amount FROM orders AS o JOIN order_items AS oi ON o.order_id = oi.order_id JOIN employees AS e ON o.employee_id = e.employee_id GROUP BY e.region HAVING COUNT(oi.order_item_id) > 2",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "List all the order dates along with the total amount of orders for customers located in Seattle.",
+    "sql_query": "SELECT o.order_date, o.total_amount FROM orders o JOIN customers c ON o.customer_id = c.customer_id WHERE c.city = 'Seattle';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Find all orders placed before March 1, 2023.",
+    "sql_query": "SELECT * FROM orders WHERE order_date < '2023-03-01';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Identify the top 5 products generating the highest revenue from completed orders, showing their name and total revenue.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity * oi.unit_price) AS total_revenue FROM order_items oi JOIN products p ON oi.product_id = p.product_id JOIN orders o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.product_name ORDER BY total_revenue DESC LIMIT 5;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve all completed orders placed in December 2022.",
+    "sql_query": "SELECT * FROM orders WHERE status = 'completed' AND order_date >= '2022-12-01' AND order_date < '2023-01-01';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find the total spending of customers segmented as retail.",
+    "sql_query": "SELECT SUM(o.total_amount) AS total_spent FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE c.segment = 'retail';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Show all orders sorted by total amount in descending order.",
+    "sql_query": "SELECT * FROM orders ORDER BY total_amount DESC;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Retrieve the total sales amount for products in the 'Electronics' category, grouped by product name, only for completed orders.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity * oi.unit_price) AS total_sales FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE p.category = 'Electronics' AND o.status = 'completed' GROUP BY p.product_name HAVING SUM(oi.quantity * oi.unit_price) > 1000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "List the top 3 cities by total sales volume, including only cities with more than 10 orders.",
+    "sql_query": "SELECT c.city, SUM(o.total_amount) AS total_sales FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id GROUP BY c.city HAVING COUNT(o.order_id) > 10 ORDER BY total_sales DESC LIMIT 3",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Retrieve all completed orders along with the customer names and emails.",
+    "sql_query": "SELECT customers.full_name, customers.email, orders.order_id, orders.order_date FROM orders JOIN customers ON orders.customer_id = customers.customer_id WHERE orders.status = 'completed';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Find the average order total per employee, with the employee's full name and region included, sorted by the average order total in ascending order.",
+    "sql_query": "SELECT e.employee_id, e.full_name, e.region, AVG(o.total_amount) AS avg_order_total FROM employees e JOIN orders o ON e.employee_id = o.employee_id GROUP BY e.employee_id ORDER BY avg_order_total ASC;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get a list of corporate customers who have pending orders and their signup dates.",
+    "sql_query": "SELECT customers.full_name, customers.signup_date FROM customers JOIN orders ON customers.customer_id = orders.customer_id WHERE customers.segment = 'corporate' AND orders.status = 'pending';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Show the total amount spent by customers from the retail segment.",
+    "sql_query": "SELECT customers.full_name, SUM(orders.total_amount) AS total_spent FROM customers JOIN orders ON customers.customer_id = orders.customer_id WHERE customers.segment = 'retail' GROUP BY customers.full_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Get the total number of items ordered and the total revenue generated from all cancelled orders, grouped by customer segment.",
+    "sql_query": "SELECT c.segment, SUM(oi.quantity) AS total_items, SUM(oi.unit_price * oi.quantity) AS total_revenue FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN order_items oi ON o.order_id = oi.order_id WHERE o.status = 'cancelled' GROUP BY c.segment",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find the average commission rate of employees who have sold products worth more than $10000 in total.",
+    "sql_query": "SELECT AVG(e.commission_rate) AS average_commission FROM employees AS e JOIN orders AS o ON e.employee_id = o.employee_id JOIN order_items AS oi ON o.order_id = oi.order_id GROUP BY e.employee_id HAVING SUM(oi.unit_price * oi.quantity) > 10000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Get the total amount spent by each segment of customers, along with the number of orders for each segment.",
+    "sql_query": "SELECT c.segment, SUM(o.total_amount) AS total_spent, COUNT(o.order_id) AS order_count FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.segment;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get all products that are in the 'Clothing' category and cost less than $30.",
+    "sql_query": "SELECT * FROM products WHERE category = 'Clothing' AND cost < 30;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get the email addresses of customers who have made orders over $500.",
+    "sql_query": "SELECT DISTINCT customers.email FROM customers JOIN orders ON customers.customer_id = orders.customer_id WHERE orders.total_amount > 500;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "List the employees who have processed orders worth more than $10,000, including their names and total revenue generated.",
+    "sql_query": "SELECT e.full_name, SUM(o.total_amount) AS total_revenue FROM employees AS e JOIN orders AS o ON e.employee_id = o.employee_id GROUP BY e.employee_id HAVING SUM(o.total_amount) > 10000",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get the count of completed and cancelled orders for each customer along with their segment.",
+    "sql_query": "SELECT c.full_name, c.segment, COUNT(CASE WHEN o.status = 'completed' THEN 1 END) AS completed_orders, COUNT(CASE WHEN o.status = 'cancelled' THEN 1 END) AS cancelled_orders FROM customers c LEFT JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.full_name, c.segment;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Find the customers with the highest total spending on 'furniture' category products, including the total number of orders placed.",
+    "sql_query": "SELECT c.customer_id, c.full_name, SUM(o.total_amount) AS total_spending, COUNT(o.order_id) AS order_count FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN order_items oi ON o.order_id = oi.order_id JOIN products p ON oi.product_id = p.product_id WHERE p.category = 'furniture' GROUP BY c.customer_id, c.full_name ORDER BY total_spending DESC LIMIT 10;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Count the number of orders for each product category where total revenue exceeds $2000.",
+    "sql_query": "SELECT p.category, COUNT(oi.order_item_id) AS order_count FROM order_items AS oi JOIN products AS p ON oi.product_id = p.product_id JOIN orders AS o ON oi.order_id = o.order_id GROUP BY p.category HAVING SUM(oi.unit_price * oi.quantity) > 2000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find the top selling product categories based on total sales amount from completed orders.",
+    "sql_query": "SELECT p.category, SUM(oi.quantity * oi.unit_price) AS total_sales FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.category ORDER BY total_sales DESC;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find customers who have placed orders with multiple employees, including their full name and the count of distinct employees they ordered from.",
+    "sql_query": "SELECT c.customer_id, c.full_name, COUNT(DISTINCT o.employee_id) AS employee_count FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id GROUP BY c.customer_id HAVING COUNT(DISTINCT o.employee_id) > 1",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "List all customers and the total amount they spent in completed orders for each product category.",
+    "sql_query": "SELECT c.customer_id, p.category, SUM(oi.quantity * oi.unit_price) AS total_spent FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN order_items oi ON o.order_id = oi.order_id JOIN products p ON oi.product_id = p.product_id WHERE o.status = 'completed' GROUP BY c.customer_id, p.category",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Identify employees who are earning above average commission rates and the total number of orders they have handled.",
+    "sql_query": "WITH avg_commission AS (SELECT AVG(commission_rate) AS average_rate FROM employees) SELECT e.full_name, COUNT(o.order_id) AS total_orders FROM employees e JOIN orders o ON e.employee_id = o.employee_id WHERE e.commission_rate > (SELECT average_rate FROM avg_commission) GROUP BY e.employee_id;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "List the top 3 products by total revenue from completed orders for customers in the corporate segment.",
+    "sql_query": "SELECT p.product_id, p.product_name, SUM(oi.quantity * oi.unit_price) AS total_revenue FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id JOIN customers c ON o.customer_id = c.customer_id WHERE c.segment = 'corporate' AND o.status = 'completed' GROUP BY p.product_id, p.product_name ORDER BY total_revenue DESC LIMIT 3;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Show each customer's full name along with the orders they've placed sorted by order date.",
+    "sql_query": "SELECT c.full_name, o.order_date FROM customers c JOIN orders o ON c.customer_id = o.customer_id ORDER BY o.order_date;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Retrieve all customers whose email contains '@gmail.com'.",
+    "sql_query": "SELECT * FROM customers WHERE email LIKE '%@gmail.com%';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find the number of products sold for each category in cancelled orders, showing only categories with more than 5 products sold.",
+    "sql_query": "SELECT p.category, SUM(oi.quantity) AS total_quantity FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'cancelled' GROUP BY p.category HAVING SUM(oi.quantity) > 5",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Get all products that belong to the 'Home Appliances' category and are priced under $200.",
+    "sql_query": "SELECT * FROM products WHERE category = 'Home Appliances' AND price < 200;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List the top 5 customers by total amount spent and their corresponding signup dates.",
+    "sql_query": "SELECT c.full_name, SUM(o.total_amount) AS total_spent, c.signup_date FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.full_name, c.signup_date ORDER BY total_spent DESC LIMIT 5;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Retrieve all customers who signed up in 2023.",
+    "sql_query": "SELECT * FROM customers WHERE EXTRACT(YEAR FROM signup_date) = 2023;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Retrieve a list of customers and the number of unique products they have ordered, showing only those with more than 5 unique products.",
+    "sql_query": "SELECT c.customer_id, COUNT(DISTINCT oi.product_id) AS unique_products FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id JOIN order_items AS oi ON o.order_id = oi.order_id GROUP BY c.customer_id HAVING COUNT(DISTINCT oi.product_id) > 5",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve the average cost of products ordered by corporate clients who have had at least one completed order.",
+    "sql_query": "SELECT AVG(p.cost) AS average_cost FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id JOIN customers c ON o.customer_id = c.customer_id WHERE c.segment = 'corporate' AND o.status = 'completed';",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get all customers with the email domain 'example.com'.",
+    "sql_query": "SELECT * FROM customers WHERE email LIKE '%@example.com';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Show all orders with a total amount equal to $999.",
+    "sql_query": "SELECT * FROM orders WHERE total_amount = 999;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get all products priced at $50 or more.",
+    "sql_query": "SELECT * FROM products WHERE price >= 50;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Retrieve the names of customers and their corresponding cities who have never made an order.",
+    "sql_query": "SELECT customers.full_name, customers.city FROM customers LEFT JOIN orders ON customers.customer_id = orders.customer_id WHERE orders.order_id IS NULL;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Identify the products with the highest return on investment (ROI) based on the profit made from orders by corporate customers.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity * oi.unit_price - oi.quantity * p.cost) / SUM(oi.quantity * p.cost) AS roi FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id JOIN customers c ON o.customer_id = c.customer_id WHERE c.segment = 'corporate' GROUP BY p.product_name ORDER BY roi DESC",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get the names and emails of all customers who have placed orders.",
+    "sql_query": "SELECT customers.full_name, customers.email FROM customers JOIN orders ON customers.customer_id = orders.customer_id;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Get the total revenue generated by each product along with the average quantity sold.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity * oi.unit_price) as total_revenue, AVG(oi.quantity) as avg_quantity_sold FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.product_name;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve all orders from a specific customer along with their order date.",
+    "sql_query": "SELECT orders.order_id, orders.order_date FROM orders JOIN customers ON orders.customer_id = customers.customer_id WHERE customers.full_name = 'John Doe';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Show all orders completed in 2023.",
+    "sql_query": "SELECT * FROM orders WHERE order_date >= '2023-01-01' AND order_date < '2024-01-01' AND status = 'completed';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List the average order total for each employee along with their sales count.",
+    "sql_query": "SELECT e.full_name, AVG(o.total_amount) AS avg_order_total, COUNT(o.order_id) AS sales_count FROM employees e LEFT JOIN orders o ON e.employee_id = o.employee_id GROUP BY e.full_name;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "List the top 3 customers by total order value along with their email and signup date.",
+    "sql_query": "SELECT c.full_name, c.email, c.signup_date, SUM(o.total_amount) AS total_order_value FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id ORDER BY total_order_value DESC LIMIT 3;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Retrieve all orders made by the customer with ID 102.",
+    "sql_query": "SELECT * FROM orders WHERE customer_id = 102;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Calculate the total cost of products sold for each corporate customer, including only those who have spent more than $1,000 overall.",
+    "sql_query": "SELECT c.full_name, SUM(oi.quantity * p.cost) AS total_cost FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id JOIN order_items AS oi ON o.order_id = oi.order_id JOIN products AS p ON oi.product_id = p.product_id WHERE c.segment = 'corporate' GROUP BY c.full_name HAVING SUM(o.total_amount) > 1000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "List the names of customers who have placed orders since a specific signup date.",
+    "sql_query": "SELECT DISTINCT customers.full_name FROM customers JOIN orders ON customers.customer_id = orders.customer_id WHERE customers.signup_date > '2023-01-01';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "List all products in the 'Clothing' category that cost less than $20.",
+    "sql_query": "SELECT * FROM products WHERE category = 'Clothing' AND cost < 20;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find all employees who have completed orders with total amounts exceeding the average order amount across all orders.",
+    "sql_query": "SELECT e.full_name FROM employees e JOIN orders o ON e.employee_id = o.employee_id WHERE o.status = 'completed' AND o.total_amount > (SELECT AVG(total_amount) FROM orders);",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Find customers who have placed more than five orders.",
+    "sql_query": "SELECT customers.full_name, COUNT(orders.order_id) AS order_count FROM customers JOIN orders ON customers.customer_id = orders.customer_id GROUP BY customers.full_name HAVING COUNT(orders.order_id) > 5",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "List all customers with their signup date and the orders they have places.",
+    "sql_query": "SELECT c.full_name, c.signup_date, o.order_id FROM customers c JOIN orders o ON c.customer_id = o.customer_id;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Retrieve a list of products sold along with the number of orders they appeared in, sorted by the most frequently ordered.",
+    "sql_query": "SELECT p.product_name, COUNT(DISTINCT oi.order_id) AS order_count FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id GROUP BY p.product_name ORDER BY order_count DESC;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get the list of customers along with their orders that are completed.",
+    "sql_query": "SELECT customers.full_name, orders.order_id FROM customers JOIN orders ON customers.customer_id = orders.customer_id WHERE orders.status = 'completed';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Find the names of products that have never been sold.",
+    "sql_query": "SELECT products.product_name FROM products LEFT JOIN order_items ON products.product_id = order_items.product_id WHERE order_items.order_item_id IS NULL;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Calculate the total cost of products sold in completed orders for each employee in the east region.",
+    "sql_query": "SELECT e.full_name, SUM(oi.quantity * p.cost) as total_cost FROM employees e JOIN orders o ON e.employee_id = o.employee_id JOIN order_items oi ON o.order_id = oi.order_id JOIN products p ON oi.product_id = p.product_id WHERE e.region = 'east' AND o.status = 'completed' GROUP BY e.full_name;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Count the distinct products ordered by corporate customers and calculate the average price.",
+    "sql_query": "SELECT COUNT(DISTINCT p.product_id) AS distinct_product_count, AVG(p.price) AS average_price FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id JOIN customers c ON o.customer_id = c.customer_id WHERE c.segment = 'corporate';",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Retrieve the customers who have made more than 5 orders, along with their total spending and the latest signup date.",
+    "sql_query": "SELECT c.customer_id, c.full_name, COUNT(o.order_id) AS order_count, SUM(o.total_amount) AS total_spending, MAX(c.signup_date) AS latest_signup FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id GROUP BY c.customer_id HAVING COUNT(o.order_id) > 5",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "List all products sold by employees in the 'east' region, along with the total quantity sold and total revenue generated, for the month of October 2023.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity) AS total_quantity, SUM(oi.unit_price * oi.quantity) AS total_revenue FROM order_items oi JOIN orders o ON oi.order_id = o.order_id JOIN employees e ON o.employee_id = e.employee_id JOIN products p ON oi.product_id = p.product_id WHERE e.region = 'east' AND EXTRACT(MONTH FROM o.order_date) = 10 AND EXTRACT(YEAR FROM o.order_date) = 2023 GROUP BY p.product_name",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Find the number of pending orders for each product category, including categories with at least 5 pending orders.",
+    "sql_query": "SELECT p.category, COUNT(o.order_id) AS pending_order_count FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'pending' GROUP BY p.category HAVING COUNT(o.order_id) >= 5",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Calculate the average order value for corporate customers served by employees with a commission rate higher than 10%.",
+    "sql_query": "SELECT AVG(o.total_amount) AS avg_order_value FROM orders o JOIN customers c ON o.customer_id = c.customer_id JOIN employees e ON o.employee_id = e.employee_id WHERE c.segment = 'corporate' AND e.commission_rate > 0.10;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "List the average price of products sold by each customer segment, but only for segments where the average price is above 50.",
+    "sql_query": "SELECT c.segment, AVG(p.price) AS avg_product_price FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id JOIN order_items AS oi ON o.order_id = oi.order_id JOIN products AS p ON oi.product_id = p.product_id GROUP BY c.segment HAVING AVG(p.price) > 50",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Identify the products that have a higher average selling price than the average selling price for all products.",
+    "sql_query": "SELECT p.product_name FROM products p WHERE p.price > (SELECT AVG(price) FROM products);",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Find the order IDs and the total amounts for each order along with the customer names.",
+    "sql_query": "SELECT o.order_id, o.total_amount, c.full_name FROM orders o JOIN customers c ON o.customer_id = c.customer_id;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Show the average order total for completed orders by each customer segment.",
+    "sql_query": "SELECT customers.segment, AVG(orders.total_amount) AS average_order_total FROM customers JOIN orders ON customers.customer_id = orders.customer_id WHERE orders.status = 'completed' GROUP BY customers.segment;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Find the highest order total for completed orders along with customer names.",
+    "sql_query": "SELECT customers.full_name, MAX(orders.total_amount) AS highest_order_total FROM orders JOIN customers ON orders.customer_id = customers.customer_id WHERE orders.status = 'completed' GROUP BY customers.full_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Retrieve all products in the 'furniture' category with a price greater than 100.",
+    "sql_query": "SELECT * FROM products WHERE category = 'furniture' AND price > 100;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Identify customers from 'east' region who have ordered products from more than 3 different categories.",
+    "sql_query": "SELECT c.full_name, COUNT(DISTINCT p.category) AS category_count FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id JOIN order_items AS oi ON o.order_id = oi.order_id JOIN products AS p ON oi.product_id = p.product_id WHERE c.city = 'east' GROUP BY c.full_name HAVING COUNT(DISTINCT p.category) > 3",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Show all customers who have placed orders and their corresponding order total amounts.",
+    "sql_query": "SELECT c.full_name, o.total_amount FROM customers c JOIN orders o ON c.customer_id = o.customer_id;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Retrieve the total quantity sold and the total revenue generated for each product category where the total revenue is above 2000.",
+    "sql_query": "SELECT p.category, SUM(oi.quantity) AS total_quantity, SUM(oi.unit_price * oi.quantity) AS total_revenue FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id GROUP BY p.category HAVING SUM(oi.unit_price * oi.quantity) > 2000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve the email addresses of customers who live in New York.",
+    "sql_query": "SELECT email FROM customers WHERE city = 'New York';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Retrieve all products along with their order quantities from orders.",
+    "sql_query": "SELECT products.product_name, order_items.quantity FROM order_items JOIN products ON order_items.product_id = products.product_id;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Determine the average price of products sold to corporate customers in completed orders.",
+    "sql_query": "SELECT AVG(p.price) AS average_product_price FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id JOIN customers c ON o.customer_id = c.customer_id WHERE c.segment = 'corporate' AND o.status = 'completed';",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "List the products that have been sold at an average price higher than $100, including their category and total sales.",
+    "sql_query": "SELECT p.product_name, p.category, SUM(oi.quantity * oi.unit_price) AS total_sales FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id GROUP BY p.product_name, p.category HAVING AVG(oi.unit_price) > 100",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find the order IDs and total amounts for cancelled orders along with the employee names who processed them.",
+    "sql_query": "SELECT o.order_id, o.total_amount, e.full_name FROM orders o JOIN employees e ON o.employee_id = e.employee_id WHERE o.status = 'cancelled';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "List customers living in the city of New York and are in the VIP segment.",
+    "sql_query": "SELECT * FROM customers WHERE city = 'New York' AND segment = 'vip';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List the total sales revenue for each product category, restricting to categories with total sales greater than $10,000.",
+    "sql_query": "SELECT p.category, SUM(oi.quantity * oi.unit_price) AS total_sales FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.category HAVING SUM(oi.quantity * oi.unit_price) > 10000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find the total number of orders and the average order value for customers in each segment, grouped by segment type.",
+    "sql_query": "SELECT c.segment, COUNT(o.order_id) AS total_orders, AVG(o.total_amount) AS average_order_value FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.segment",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Show all completed orders placed in the year 2022.",
+    "sql_query": "SELECT * FROM orders WHERE status = 'completed' AND EXTRACT(YEAR FROM order_date) = 2022;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find the number of unique products ordered by each customer segment, indicating which segments order the most unique products.",
+    "sql_query": "SELECT c.segment, COUNT(DISTINCT oi.product_id) as unique_products_count FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN order_items oi ON o.order_id = oi.order_id GROUP BY c.segment;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Retrieve the names of employees who have processed orders worth more than 500.",
+    "sql_query": "SELECT DISTINCT e.full_name FROM employees e JOIN orders o ON e.employee_id = o.employee_id WHERE o.total_amount > 500;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Fetch the total count of different products sold for each segment type, but only include segments with total sales greater than 100.",
+    "sql_query": "SELECT c.segment, COUNT(DISTINCT oi.product_id) AS unique_products_sold FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id JOIN order_items AS oi ON o.order_id = oi.order_id WHERE o.status = 'completed' GROUP BY c.segment HAVING COUNT(DISTINCT oi.product_id) > 100",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Show all customers who are not in the corporate segment.",
+    "sql_query": "SELECT * FROM customers WHERE segment <> 'corporate';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List all customers with their emails who have placed more than three orders.",
+    "sql_query": "SELECT customers.full_name, customers.email FROM customers JOIN orders ON customers.customer_id = orders.customer_id GROUP BY customers.customer_id HAVING COUNT(orders.order_id) > 3;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Get the list of products that have been sold in orders that were cancelled, showing the total quantity sold and the product price, but only include products with total quantity sold greater than 10.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity) AS total_quantity_sold, p.price FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'cancelled' GROUP BY p.product_id HAVING SUM(oi.quantity) > 10",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "List all products with a price between $50 and $150.",
+    "sql_query": "SELECT * FROM products WHERE price BETWEEN 50 AND 150;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find the average order value for each employee, limiting the results to employees who have handled at least five orders.",
+    "sql_query": "SELECT e.full_name, AVG(o.total_amount) AS avg_order_value FROM employees AS e JOIN orders AS o ON e.employee_id = o.employee_id GROUP BY e.employee_id HAVING COUNT(o.order_id) >= 5",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Count the total number of orders placed.",
+    "sql_query": "SELECT COUNT(*) FROM orders;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List each customer with the total number of completed and cancelled orders they have made.",
+    "sql_query": "SELECT c.customer_id, c.full_name,\n    SUM(CASE WHEN o.status = 'completed' THEN 1 ELSE 0 END) AS completed_orders,\n    SUM(CASE WHEN o.status = 'cancelled' THEN 1 ELSE 0 END) AS cancelled_orders\nFROM customers c\nLEFT JOIN orders o ON c.customer_id = o.customer_id\nGROUP BY c.customer_id, c.full_name;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Retrieve customer names and their total order count if they have made any orders post their signup date.",
+    "sql_query": "SELECT c.full_name, COUNT(o.order_id) AS order_count FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE o.order_date > c.signup_date GROUP BY c.full_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Find the top 5 customers by total spending, including their details and the number of orders they placed, ordered by their total spending from highest to lowest.",
+    "sql_query": "SELECT c.customer_id, c.full_name, c.email, SUM(o.total_amount) AS total_spending, COUNT(o.order_id) AS order_count FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id, c.full_name, c.email ORDER BY total_spending DESC LIMIT 5",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Count the total number of completed orders for each product in the 'clothing' category and show the total revenue for each.",
+    "sql_query": "SELECT p.product_name, COUNT(oi.order_item_id) AS total_orders, SUM(oi.unit_price * oi.quantity) AS total_revenue FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id WHERE p.category = 'clothing' AND o.status = 'completed' GROUP BY p.product_name;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "List all completed orders from the year 2022.",
+    "sql_query": "SELECT * FROM orders WHERE status = 'completed' AND order_date >= '2022-01-01' AND order_date < '2023-01-01';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Retrieve the list of products with their total sales amount, but only include products where the total sales are greater than $1000 and the category is 'electronics'.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity * oi.unit_price) AS total_sales FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE p.category = 'electronics' GROUP BY p.product_id HAVING SUM(oi.quantity * oi.unit_price) > 1000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "List all products that have been ordered more than 5 times and show their name and total quantity sold.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity) AS total_quantity_sold FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id GROUP BY p.product_id HAVING COUNT(oi.order_item_id) > 5",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Identify the total number of different products sold and total revenue per customer in the 'retail' segment, filtering to those with a revenue of more than $2,000.",
+    "sql_query": "SELECT c.full_name, COUNT(DISTINCT oi.product_id) AS unique_products, SUM(o.total_amount) AS total_revenue FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id JOIN order_items AS oi ON o.order_id = oi.order_id WHERE c.segment = 'retail' GROUP BY c.customer_id HAVING SUM(o.total_amount) > 2000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "List all products in the 'Furniture' category with a price of $300 or higher.",
+    "sql_query": "SELECT * FROM products WHERE category = 'Furniture' AND price >= 300;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Identify the cities where customers spend more than the average amount on their orders, including the city name and the total spent by customers in those cities.",
+    "sql_query": "SELECT c.city, SUM(o.total_amount) AS total_spent FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id GROUP BY c.city HAVING SUM(o.total_amount) > (SELECT AVG(total_amount) FROM orders)",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Find the average commission rate of employees who manage at least 10 unique customers, along with the total number of customers.",
+    "sql_query": "SELECT AVG(e.commission_rate) AS average_commission_rate, COUNT(DISTINCT o.customer_id) AS total_customers FROM employees AS e JOIN orders AS o ON e.employee_id = o.employee_id GROUP BY e.employee_id HAVING COUNT(DISTINCT o.customer_id) >= 10",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Find all completed orders made in 2021.",
+    "sql_query": "SELECT * FROM orders WHERE status = 'completed' AND order_date >= '2021-01-01' AND order_date < '2022-01-01';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List all orders that are currently pending.",
+    "sql_query": "SELECT * FROM orders WHERE status = 'pending';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get the names and regions of employees who handled orders with a total amount greater than 1000.",
+    "sql_query": "SELECT e.full_name, e.region FROM employees e JOIN orders o ON e.employee_id = o.employee_id WHERE o.total_amount > 1000;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Calculate the total costs versus total revenue for all products in a specific category, only showing categories where the revenue exceeds costs.",
+    "sql_query": "SELECT p.category, SUM(oi.quantity * oi.unit_price) AS total_revenue, SUM(oi.quantity * p.cost) AS total_costs FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.category HAVING SUM(oi.quantity * oi.unit_price) > SUM(oi.quantity * p.cost)",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find all orders placed in the last 30 days.",
+    "sql_query": "SELECT * FROM orders WHERE order_date >= CURRENT_DATE - INTERVAL '30 days';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List all corporate customers who signed up after January 1, 2022.",
+    "sql_query": "SELECT * FROM customers WHERE segment = 'corporate' AND signup_date > '2022-01-01';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get the average product price per category, filtering categories that have more than 5 products listed.",
+    "sql_query": "SELECT p.category, AVG(p.price) AS average_price FROM products AS p GROUP BY p.category HAVING COUNT(p.product_id) > 5",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get all completed orders with a total amount greater than $1000.",
+    "sql_query": "SELECT * FROM orders WHERE status = 'completed' AND total_amount > 1000;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get the total number of orders and total revenue for each product in the 'Electronics' category.",
+    "sql_query": "SELECT p.product_name, COUNT(o.order_id) AS total_orders, SUM(oi.quantity * oi.unit_price) AS total_revenue FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id WHERE p.category = 'Electronics' GROUP BY p.product_name;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find the customers who have ordered products from more than 3 different categories, including their total spend in each category.",
+    "sql_query": "SELECT c.full_name, p.category, SUM(oi.quantity * oi.unit_price) AS total_spent FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id JOIN order_items AS oi ON o.order_id = oi.order_id JOIN products AS p ON oi.product_id = p.product_id GROUP BY c.customer_id, p.category HAVING COUNT(DISTINCT p.category) > 3",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find the average total amount of completed orders grouped by customer city.",
+    "sql_query": "SELECT customers.city, AVG(orders.total_amount) AS average_order_amount FROM orders JOIN customers ON orders.customer_id = customers.customer_id WHERE orders.status = 'completed' GROUP BY customers.city;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Get the average price of products sold in completed orders per category, only showing categories with an average price above $50.",
+    "sql_query": "SELECT p.category, AVG(oi.unit_price) AS average_price FROM order_items AS oi JOIN orders AS o ON oi.order_id = o.order_id JOIN products AS p ON oi.product_id = p.product_id WHERE o.status = 'completed' GROUP BY p.category HAVING AVG(oi.unit_price) > 50",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Get all completed orders made by a specific customer with ID 3.",
+    "sql_query": "SELECT * FROM orders WHERE status = 'completed' AND customer_id = 3;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Show the total number of products sold along with the name of the product.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity) AS total_sold FROM products p JOIN order_items oi ON p.product_id = oi.product_id GROUP BY p.product_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Find the total revenue generated from completed orders in the 'fashion' category, grouped by month.",
+    "sql_query": "SELECT DATE_TRUNC('month', o.order_date) AS month, SUM(o.total_amount) AS total_revenue FROM orders o JOIN order_items oi ON o.order_id = oi.order_id JOIN products p ON oi.product_id = p.product_id WHERE o.status = 'completed' AND p.category = 'fashion' GROUP BY month ORDER BY month;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find the total revenue generated by products in a specific category that have been sold.",
+    "sql_query": "SELECT SUM(order_items.quantity * products.price) AS total_revenue FROM order_items JOIN products ON order_items.product_id = products.product_id WHERE products.category = 'electronics';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "For each customer, find how many different products they have ordered and their corresponding total spent, only including those customers who have ordered more than 5 different products.",
+    "sql_query": "SELECT c.full_name, COUNT(DISTINCT oi.product_id) AS different_products, SUM(o.total_amount) AS total_spent FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id JOIN order_items AS oi ON o.order_id = oi.order_id GROUP BY c.full_name HAVING COUNT(DISTINCT oi.product_id) > 5",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Show all customers and their order count for those who joined in 2022.",
+    "sql_query": "SELECT customers.full_name, COUNT(orders.order_id) AS order_count FROM customers LEFT JOIN orders ON customers.customer_id = orders.customer_id WHERE EXTRACT(YEAR FROM customers.signup_date) = 2022 GROUP BY customers.full_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Find the names of employees who have processed orders in the east region.",
+    "sql_query": "SELECT DISTINCT employees.full_name FROM employees JOIN orders ON employees.employee_id = orders.employee_id WHERE employees.region = 'east';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Show all customers who signed up in 2022.",
+    "sql_query": "SELECT * FROM customers WHERE signup_date >= '2022-01-01' AND signup_date < '2023-01-01';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List all employees who have processed more than 10 orders.",
+    "sql_query": "SELECT employees.full_name FROM orders JOIN employees ON orders.employee_id = employees.employee_id GROUP BY employees.full_name HAVING COUNT(orders.order_id) > 10;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Find customers in the corporate segment with a signup date in 2020.",
+    "sql_query": "SELECT * FROM customers WHERE segment = 'corporate' AND signup_date BETWEEN '2020-01-01' AND '2020-12-31';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List all products sold by employees from the east region, including the total quantity sold for each product, and only show products that have been sold more than 100 times.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity) AS total_quantity_sold FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id JOIN employees AS e ON o.employee_id = e.employee_id WHERE e.region = 'east' GROUP BY p.product_id HAVING SUM(oi.quantity) > 100",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve all orders placed on or after January 1, 2023.",
+    "sql_query": "SELECT * FROM orders WHERE order_date >= '2023-01-01';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Retrieve the average price of products sold across different categories, but only include categories with total sales exceeding $10,000.",
+    "sql_query": "SELECT p.category, AVG(oi.unit_price) AS average_price FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.category HAVING SUM(oi.quantity * oi.unit_price) > 10000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Determine the average price of products sold in completed orders and group by product category, only include categories with an average price over $50.",
+    "sql_query": "SELECT p.category, AVG(oi.unit_price) AS avg_price FROM order_items AS oi JOIN orders AS o ON oi.order_id = o.order_id JOIN products AS p ON oi.product_id = p.product_id WHERE o.status = 'completed' GROUP BY p.category HAVING AVG(oi.unit_price) > 50",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find the average order value for each customer segment and order status combination.",
+    "sql_query": "SELECT c.segment, o.status, AVG(o.total_amount) AS average_order_value FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.segment, o.status",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "List all employees with a commission rate of at least 10%.",
+    "sql_query": "SELECT * FROM employees WHERE commission_rate >= 0.10;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Select all order items where the quantity is greater than 3.",
+    "sql_query": "SELECT * FROM order_items WHERE quantity > 3;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Retrieve a list of product categories and their corresponding total revenue, for categories generating more than $50,000.",
+    "sql_query": "SELECT p.category, SUM(oi.quantity * oi.unit_price) AS total_revenue FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id GROUP BY p.category HAVING SUM(oi.quantity * oi.unit_price) > 50000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve all orders from the last month.",
+    "sql_query": "SELECT * FROM orders WHERE order_date >= NOW() - INTERVAL '1 month';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get the details of customers who have never placed an order.",
+    "sql_query": "SELECT customers.full_name, customers.email FROM customers LEFT JOIN orders ON customers.customer_id = orders.customer_id WHERE orders.order_id IS NULL;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Get all order items where the quantity is equal to 1.",
+    "sql_query": "SELECT * FROM order_items WHERE quantity = 1;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List employees along with their total sold product count and total commission earned for orders completed.",
+    "sql_query": "SELECT e.full_name, SUM(oi.quantity) AS total_products_sold, SUM(oi.quantity * o.total_amount * e.commission_rate) AS total_commission FROM employees e JOIN orders o ON e.employee_id = o.employee_id JOIN order_items oi ON o.order_id = oi.order_id WHERE o.status = 'completed' GROUP BY e.full_name;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve the order details with their respective statuses for each customer.",
+    "sql_query": "SELECT customers.full_name, orders.order_id, orders.status FROM customers JOIN orders ON customers.customer_id = orders.customer_id;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Determine the average price of products sold in completed orders and categorize them by segment.",
+    "sql_query": "SELECT c.segment, AVG(p.price) as avg_product_price FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN order_items oi ON o.order_id = oi.order_id JOIN products p ON oi.product_id = p.product_id WHERE o.status = 'completed' GROUP BY c.segment;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Get products with prices between $25 and $100, categorized as 'Clothing'.",
+    "sql_query": "SELECT * FROM products WHERE category = 'Clothing' AND price BETWEEN 25 AND 100;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List the segments of customers along with the maximum single order amount made by any customer in each segment.",
+    "sql_query": "SELECT c.segment, MAX(o.total_amount) AS max_order FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.segment;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Find the cost-to-price ratio for each product category and identify which category has the highest average.",
+    "sql_query": "SELECT p.category, AVG(p.cost / p.price) AS cost_to_price_ratio FROM products p GROUP BY p.category ORDER BY cost_to_price_ratio DESC;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Find the total sales amount for each product category where the total sales exceed $1000.",
+    "sql_query": "SELECT p.category, SUM(oi.quantity * oi.unit_price) AS total_sales FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id GROUP BY p.category HAVING SUM(oi.quantity * oi.unit_price) > 1000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Get the list of products and their sold quantities where the total sold quantity exceeds 100 units, and the products' price is above $50.",
+    "sql_query": "SELECT p.product_id, p.product_name, SUM(oi.quantity) AS total_sold FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE p.price > 50 GROUP BY p.product_id, p.product_name HAVING SUM(oi.quantity) > 100",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve the total quantity of products sold by category for orders completed by employees in the central region.",
+    "sql_query": "SELECT p.category, SUM(oi.quantity) AS total_quantity FROM order_items oi JOIN orders o ON oi.order_id = o.order_id JOIN employees e ON o.employee_id = e.employee_id JOIN products p ON oi.product_id = p.product_id WHERE e.region = 'central' AND o.status = 'completed' GROUP BY p.category;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Identify the years with the highest total order amounts, along with the total amount for each year.",
+    "sql_query": "SELECT EXTRACT(YEAR FROM o.order_date) AS order_year, SUM(o.total_amount) AS total_amount FROM orders o GROUP BY EXTRACT(YEAR FROM o.order_date) ORDER BY total_amount DESC",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "List all completed orders along with the customer's full name and city.",
+    "sql_query": "SELECT orders.order_id, customers.full_name, customers.city FROM orders JOIN customers ON orders.customer_id = customers.customer_id WHERE orders.status = 'completed';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Retrieve the list of employees along with the total number of active orders they have.",
+    "sql_query": "SELECT e.full_name, COUNT(o.order_id) AS active_orders FROM employees e JOIN orders o ON e.employee_id = o.employee_id WHERE o.status != 'completed' GROUP BY e.full_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "List all products that have been ordered by customers in the VIP segment, including the product names and total number sold.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity) AS total_sold FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id JOIN customers c ON o.customer_id = c.customer_id WHERE c.segment = 'vip' GROUP BY p.product_name;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve orders placed on or after June 1, 2021.",
+    "sql_query": "SELECT * FROM orders WHERE order_date >= '2021-06-01';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find the most popular product in the 'electronics' category based on the total quantity sold.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity) as total_quantity_sold FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id WHERE p.category = 'electronics' AND o.status = 'completed' GROUP BY p.product_name ORDER BY total_quantity_sold DESC LIMIT 1;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Show all products that are priced over $500.",
+    "sql_query": "SELECT * FROM products WHERE price > 500;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get the product names and total sales amount for products sold by employees in the central region, filtering for those with total sales less than $1000.",
+    "sql_query": "SELECT p.product_name, SUM(oi.unit_price * oi.quantity) AS total_sales FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id JOIN employees AS e ON o.employee_id = e.employee_id WHERE e.region = 'central' GROUP BY p.product_name HAVING SUM(oi.unit_price * oi.quantity) < 1000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve the product name and total sales for products that have been ordered more than 10 times.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity) AS total_sales FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.product_name HAVING SUM(oi.quantity) > 10",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve the full names and signup dates of all customers from the city 'New York'.",
+    "sql_query": "SELECT full_name, signup_date FROM customers WHERE city = 'New York';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find the order dates and total amounts for completed orders by VIP customers.",
+    "sql_query": "SELECT o.order_date, o.total_amount FROM orders o JOIN customers c ON o.customer_id = c.customer_id WHERE c.segment = 'vip' AND o.status = 'completed';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Find the distinct customers who have ordered products in both 'clothing' and 'liquor' categories, along with their signup date and segment.",
+    "sql_query": "SELECT DISTINCT c.customer_id, c.full_name, c.signup_date, c.segment FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN order_items oi ON o.order_id = oi.order_id JOIN products p ON oi.product_id = p.product_id WHERE p.category IN ('clothing', 'liquor') GROUP BY c.customer_id, c.full_name, c.signup_date, c.segment HAVING COUNT(DISTINCT p.category) = 2",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Identify average product costs by category, along with the total number of products in each category.",
+    "sql_query": "SELECT p.category, AVG(p.cost) as avg_cost, COUNT(p.product_id) as total_products FROM products p GROUP BY p.category;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Find the top three customers by total amount spent on orders, along with their segment and the number of orders they made.",
+    "sql_query": "SELECT c.full_name, c.segment, COUNT(o.order_id) AS order_count, SUM(o.total_amount) AS total_spent FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.full_name, c.segment ORDER BY total_spent DESC LIMIT 3;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Find the number of distinct products sold by each employee and the total revenue they generated.",
+    "sql_query": "SELECT e.full_name, COUNT(DISTINCT oi.product_id) AS distinct_products_sold, SUM(oi.unit_price * oi.quantity) AS total_revenue FROM employees e JOIN orders o ON e.employee_id = o.employee_id JOIN order_items oi ON o.order_id = oi.order_id GROUP BY e.employee_id;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get the average revenue per order for each product category that has more than 50 orders in total.",
+    "sql_query": "SELECT p.category, AVG(o.total_amount) AS average_revenue_per_order FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id GROUP BY p.category HAVING COUNT(o.order_id) > 50",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve the names of customers along with the number of completed orders they have.",
+    "sql_query": "SELECT c.full_name, COUNT(o.order_id) as completed_orders_count FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE o.status = 'completed' GROUP BY c.full_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Retrieve the top 3 products by total sales amount for each employee across all regions, including the employee's name and the number of unique customers who purchased those products.",
+    "sql_query": "SELECT e.full_name, p.product_name, SUM(oi.quantity * oi.unit_price) AS total_sales, COUNT(DISTINCT o.customer_id) AS unique_customers FROM employees e JOIN orders o ON e.employee_id = o.employee_id JOIN order_items oi ON o.order_id = oi.order_id JOIN products p ON oi.product_id = p.product_id GROUP BY e.full_name, p.product_name ORDER BY total_sales DESC LIMIT 3;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get a list of total order amounts grouped by customer segment.",
+    "sql_query": "SELECT c.segment, SUM(o.total_amount) AS total_amount FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.segment;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Identify the top three products with the highest total sales amount in each segment category, filtering for segments with at least 5 products sold.",
+    "sql_query": "SELECT c.segment, p.product_name, SUM(oi.quantity * oi.unit_price) AS total_sales FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id JOIN order_items AS oi ON o.order_id = oi.order_id JOIN products AS p ON oi.product_id = p.product_id GROUP BY c.segment, p.product_name HAVING COUNT(oi.order_item_id) >= 5 ORDER BY total_sales DESC LIMIT 3",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find the cities that have the highest average order total, including the number of orders.",
+    "sql_query": "SELECT c.city, AVG(o.total_amount) AS average_order_total, COUNT(o.order_id) AS order_count FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.city ORDER BY average_order_total DESC;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get all products that are priced below $100.",
+    "sql_query": "SELECT * FROM products WHERE price < 100;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Count the number of completed orders for each retail customer.",
+    "sql_query": "SELECT c.full_name, COUNT(o.order_id) AS completed_orders FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE c.segment = 'retail' AND o.status = 'completed' GROUP BY c.full_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Calculate the percentage of completed orders per customer segment and show the total number of orders alongside it.",
+    "sql_query": "SELECT c.segment, COUNT(o.order_id) AS total_orders, (COUNT(CASE WHEN o.status = 'completed' THEN 1 END) / COUNT(o.order_id)) * 100 AS completed_percentage FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.segment",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Find all VIP customers who signed up in the last year.",
+    "sql_query": "SELECT * FROM customers WHERE segment = 'vip' AND signup_date > NOW() - INTERVAL '1 year';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find the total cost of products sold by category, ensuring that only categories with total cost above $5,000 are shown.",
+    "sql_query": "SELECT p.category, SUM(oi.quantity * p.cost) AS total_cost FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.category HAVING SUM(oi.quantity * p.cost) > 5000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find the most expensive product in each category along with its category name.",
+    "sql_query": "SELECT DISTINCT ON (p.category) p.category, p.product_name, p.price FROM products p ORDER BY p.category, p.price DESC;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get the total sales per product category where the completed order sales total more than $5000.",
+    "sql_query": "SELECT p.category, SUM(oi.quantity * oi.unit_price) AS total_sales FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.category HAVING SUM(oi.quantity * oi.unit_price) > 5000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Show the number of distinct products ordered by customers in the corporate segment along with the total sales amount.",
+    "sql_query": "SELECT c.full_name, COUNT(DISTINCT oi.product_id) AS distinct_products_ordered, SUM(o.total_amount) AS total_sales FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN order_items oi ON o.order_id = oi.order_id WHERE c.segment = 'corporate' GROUP BY c.full_name;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find customers who have placed more than 5 orders in total and their respective total spend.",
+    "sql_query": "SELECT c.customer_id, c.full_name, COUNT(o.order_id) AS total_orders, SUM(o.total_amount) AS total_spent FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id GROUP BY c.customer_id, c.full_name HAVING COUNT(o.order_id) > 5",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get the average price of products sold in completed orders by category.",
+    "sql_query": "SELECT p.category, AVG(p.price) AS avg_price FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.category;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "List all customers who signed up in 2021.",
+    "sql_query": "SELECT * FROM customers WHERE signup_date BETWEEN '2021-01-01' AND '2021-12-31';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Get the total quantity of products sold and their corresponding category for all completed orders in the last month.",
+    "sql_query": "SELECT p.category, SUM(oi.quantity) AS total_quantity_sold FROM order_items oi JOIN orders o ON oi.order_id = o.order_id JOIN products p ON oi.product_id = p.product_id WHERE o.status = 'completed' AND o.order_date >= CURRENT_DATE - INTERVAL '1 month' GROUP BY p.category;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve the email addresses of corporate customers who have not placed any cancelled orders.",
+    "sql_query": "SELECT DISTINCT c.email FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE c.segment = 'corporate' AND o.status != 'cancelled';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Get all products along with their costs and the order ID they were included in.",
+    "sql_query": "SELECT p.product_name, p.cost, oi.order_id FROM products p JOIN order_items oi ON p.product_id = oi.product_id;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Calculate the percentage of completed versus cancelled orders per employee, showing employee name and percentages.",
+    "sql_query": "SELECT e.full_name, 100.0 * SUM(CASE WHEN o.status = 'completed' THEN 1 ELSE 0 END) / COUNT(o.order_id) AS completed_percentage FROM employees e JOIN orders o ON e.employee_id = o.employee_id GROUP BY e.full_name;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "List all products along with their respective order counts.",
+    "sql_query": "SELECT products.product_name, COUNT(order_items.order_item_id) AS order_count FROM order_items JOIN products ON order_items.product_id = products.product_id GROUP BY products.product_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Show the total number of products sold and total revenue for each category, filtering for categories that generated more than $20,000 in revenue.",
+    "sql_query": "SELECT p.category, SUM(oi.quantity) AS total_sold, SUM(oi.quantity * oi.unit_price) AS total_revenue FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.category HAVING SUM(oi.quantity * oi.unit_price) > 20000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Show the total number of products sold and the average price per product for orders placed by VIP customers.",
+    "sql_query": "SELECT COUNT(oi.product_id) AS total_products_sold, AVG(oi.unit_price) AS avg_price FROM order_items oi JOIN orders o ON oi.order_id = o.order_id JOIN customers c ON o.customer_id = c.customer_id WHERE c.segment = 'vip';",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Retrieve the top selling product in terms of total revenue generated, but only include products that have sold more than 50 units.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity * oi.unit_price) AS total_revenue FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id GROUP BY p.product_id HAVING SUM(oi.quantity) > 50 ORDER BY total_revenue DESC LIMIT 1",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Get all order items with a unit price over $20.",
+    "sql_query": "SELECT * FROM order_items WHERE unit_price > 20;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Retrieve all customers who live in 'Los Angeles' and signed up in 2021.",
+    "sql_query": "SELECT * FROM customers WHERE city = 'Los Angeles' AND EXTRACT(YEAR FROM signup_date) = 2021;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Show the total expenditure of each customer categorized by city.",
+    "sql_query": "SELECT customers.city, customers.full_name, SUM(orders.total_amount) AS total_expenditure FROM orders JOIN customers ON orders.customer_id = customers.customer_id GROUP BY customers.city, customers.full_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Identify products that have been ordered by more than three different customers and calculate the total revenue they generated.",
+    "sql_query": "SELECT p.product_name, COUNT(DISTINCT o.customer_id) AS unique_customers, SUM(oi.unit_price * oi.quantity) AS total_revenue FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id GROUP BY p.product_name HAVING COUNT(DISTINCT o.customer_id) > 3",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Count how many orders each customer has placed, showing only those with more than one order.",
+    "sql_query": "SELECT customers.full_name, COUNT(orders.order_id) AS order_count FROM customers JOIN orders ON customers.customer_id = orders.customer_id GROUP BY customers.full_name HAVING COUNT(orders.order_id) > 1",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Get the list of products that have sold more than 100 units, along with their total sales.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity) AS total_units_sold, SUM(oi.quantity * oi.unit_price) AS total_sales FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.product_name HAVING SUM(oi.quantity) > 100",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Get all customers who live in Los Angeles or Chicago.",
+    "sql_query": "SELECT * FROM customers WHERE city IN ('Los Angeles', 'Chicago');",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List cities where the average order amount is greater than the average order amount across all cities.",
+    "sql_query": "SELECT city FROM (SELECT c.city, AVG(o.total_amount) AS average_city_order FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.city) AS city_orders WHERE average_city_order > (SELECT AVG(total_amount) FROM orders)",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get a list of customers who have made orders worth more than $1000, along with their total spent and segment, sorted by total spent.",
+    "sql_query": "SELECT c.full_name, c.segment, SUM(o.total_amount) AS total_spent FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id GROUP BY c.full_name, c.segment HAVING SUM(o.total_amount) > 1000 ORDER BY total_spent DESC",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Show all completed orders placed after January 1st, 2023.",
+    "sql_query": "SELECT * FROM orders WHERE status = 'completed' AND order_date > '2023-01-01';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find all VIP customers who signed up after January 1, 2020.",
+    "sql_query": "SELECT * FROM customers WHERE segment = 'vip' AND signup_date > '2020-01-01';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List customers along with their segments and order statuses.",
+    "sql_query": "SELECT c.full_name, c.segment, o.status FROM customers c JOIN orders o ON c.customer_id = o.customer_id;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "List all corporate customers who signed up in 2022.",
+    "sql_query": "SELECT * FROM customers WHERE segment = 'corporate' AND signup_date BETWEEN '2022-01-01' AND '2022-12-31';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "List the employee names and the total commission earned by each employee for orders placed by retail customers that were completed.",
+    "sql_query": "SELECT e.full_name, SUM(o.total_amount * e.commission_rate) AS total_commission FROM employees e JOIN orders o ON e.employee_id = o.employee_id JOIN customers c ON o.customer_id = c.customer_id WHERE c.segment = 'retail' AND o.status = 'completed' GROUP BY e.full_name",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Get a list of customers who have placed more than 5 orders, including their total spent and the most expensive order they have made.",
+    "sql_query": "SELECT c.customer_id, c.full_name, COUNT(o.order_id) AS order_count, SUM(o.total_amount) AS total_spent, MAX(o.total_amount) AS max_order FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id GROUP BY c.customer_id, c.full_name HAVING COUNT(o.order_id) > 5",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get the order status for orders placed by corporate customers.",
+    "sql_query": "SELECT orders.status FROM orders JOIN customers ON orders.customer_id = customers.customer_id WHERE customers.segment = 'corporate';",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Retrieve all products with a price of exactly $75.",
+    "sql_query": "SELECT * FROM products WHERE price = 75;",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find the average order total of completed orders for each product category, only for corporate customers who made purchases during the last quarter of 2023.",
+    "sql_query": "SELECT p.category, AVG(o.total_amount) AS avg_order_total FROM orders o JOIN customers c ON o.customer_id = c.customer_id JOIN order_items oi ON o.order_id = oi.order_id JOIN products p ON oi.product_id = p.product_id WHERE c.segment = 'corporate' AND o.status = 'completed' AND o.order_date BETWEEN '2023-10-01' AND '2023-12-31' GROUP BY p.category;",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "List all completed orders that were made on '2023-09-15'.",
+    "sql_query": "SELECT * FROM orders WHERE order_date = '2023-09-15' AND status = 'completed';",
+    "complexity": "easy"
+  },
+  {
+    "natural_language": "Find the customer segment that has the highest average order value among all segments.",
+    "sql_query": "SELECT c.segment, AVG(o.total_amount) AS average_order_value FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.segment ORDER BY average_order_value DESC LIMIT 1",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get all customers and their total spent, but only for those who have ordered more than once.",
+    "sql_query": "SELECT c.full_name, SUM(o.total_amount) AS total_spent FROM customers AS c JOIN orders AS o ON c.customer_id = o.customer_id GROUP BY c.full_name HAVING COUNT(o.order_id) > 1",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "List the total amount of orders placed by each customer, grouped by city.",
+    "sql_query": "SELECT customers.city, SUM(orders.total_amount) AS total_orders FROM customers JOIN orders ON customers.customer_id = orders.customer_id GROUP BY customers.city;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Get the count of orders for each customer from the retail segment.",
+    "sql_query": "SELECT c.full_name, COUNT(o.order_id) AS order_count FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE c.segment = 'retail' GROUP BY c.full_name;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Retrieve the full names of customers and the total number of orders they have made.",
+    "sql_query": "SELECT c.full_name, COUNT(o.order_id) AS order_count FROM customers c JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "Retrieve the employees' total sales, sorted by region, and filtered by those who have sales exceeding the average sales of all employees.",
+    "sql_query": "SELECT e.region, e.full_name, SUM(o.total_amount) AS total_sales FROM employees AS e JOIN orders AS o ON e.employee_id = o.employee_id GROUP BY e.region, e.full_name HAVING SUM(o.total_amount) > (SELECT AVG(total) FROM (SELECT SUM(total_amount) AS total FROM orders GROUP BY employee_id) AS avg_sales)",
+    "complexity": "very_hard"
+  },
+  {
+    "natural_language": "Get the highest selling product in the 'retail' segment and its total sales.",
+    "sql_query": "SELECT p.product_id, p.product_name, SUM(oi.quantity) AS total_sales FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id JOIN customers c ON o.customer_id = c.customer_id WHERE c.segment = 'retail' GROUP BY p.product_id ORDER BY total_sales DESC LIMIT 1;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Identify the product that has been sold the most in terms of quantity from 'completed' orders of 'vip' customers.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity) AS total_sold FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id JOIN customers c ON o.customer_id = c.customer_id WHERE o.status = 'completed' AND c.segment = 'vip' GROUP BY p.product_id ORDER BY total_sold DESC LIMIT 1;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Show the total amount spent by corporate customers along with their respective signup dates.",
+    "sql_query": "SELECT customers.signup_date, SUM(orders.total_amount) as total_spent FROM customers JOIN orders ON customers.customer_id = orders.customer_id WHERE customers.segment = 'corporate' GROUP BY customers.customer_id;",
+    "complexity": "medium"
+  },
+  {
+    "natural_language": "List the top 5 products by total quantity sold, along with the category and total revenue, only for completed orders.",
+    "sql_query": "SELECT p.product_name, p.category, SUM(oi.quantity) AS total_quantity, SUM(oi.unit_price * oi.quantity) AS total_revenue FROM products p JOIN order_items oi ON p.product_id = oi.product_id JOIN orders o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.product_name, p.category ORDER BY total_quantity DESC LIMIT 5;",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Calculate the total number of items sold and total revenue for each product category where total revenue exceeds $5000.",
+    "sql_query": "SELECT p.category, SUM(oi.quantity) AS total_items_sold, SUM(oi.unit_price * oi.quantity) AS total_revenue FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id WHERE o.status = 'completed' GROUP BY p.category HAVING SUM(oi.unit_price * oi.quantity) > 5000",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "List the top 5 products by total revenue, along with the respective order count, and only include products that generated more than $5000.",
+    "sql_query": "SELECT p.product_name, SUM(oi.quantity * oi.unit_price) AS total_revenue, COUNT(DISTINCT o.order_id) AS order_count FROM products AS p JOIN order_items AS oi ON p.product_id = oi.product_id JOIN orders AS o ON oi.order_id = o.order_id GROUP BY p.product_name HAVING SUM(oi.quantity * oi.unit_price) > 5000 ORDER BY total_revenue DESC LIMIT 5",
+    "complexity": "hard"
+  },
+  {
+    "natural_language": "Find the customers who have ordered the most expensive product, along with the product name and order details.",
+    "sql_query": "SELECT c.full_name, p.product_name, o.order_id, o.total_amount FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN order_items oi ON o.order_id = oi.order_id JOIN products p ON oi.product_id = p.product_id WHERE p.price = (SELECT MAX(price) FROM products);",
+    "complexity": "very_hard"
+  }
+]
