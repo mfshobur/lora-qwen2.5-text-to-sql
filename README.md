@@ -13,8 +13,14 @@ Evaluated on **419 held-out test questions** against a live database:
 | Execution accuracy (query runs) | 43.4% | 89.3% | +45.9 pts |
 | **Execution match (correct rows)** | **17.9%** | **52.3%** | **+34.4 pts** |
 
-By difficulty (execution match): easy 36% to 86%, medium 23% to 52%,
-hard 2% to 37%, very-hard 11% to 32%.
+By difficulty (execution match):
+
+| Difficulty | Base | Fine-tuned |
+|---|---|---|
+| Easy | 36% | 86% |
+| Medium | 23% | 52% |
+| Hard | 2% | 37% |
+| Very hard | 11% | 32% |
 
 ![Base vs fine-tuned model performance](chart.png)
 
